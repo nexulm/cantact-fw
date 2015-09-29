@@ -93,19 +93,11 @@ typedef enum
   */
 typedef struct
 {
-	uint32_t dev_endpoints;		/*!< Device Endpoints number.
-									This parameter depends on the used USB core.   
-									This parameter must be a number between Min_Data = 1 and Max_Data = 15 */
-	uint32_t ep0_mps;			/*!< Set the Endpoint 0 Max Packet size. 
-									This parameter can be any value of @ref PCD_EP0_MPS                    */              
-	uint32_t Sof_enable;		/*!< Enable or disable the output of the SOF signal.                         
-									This parameter can be set to ENABLE or DISABLE                      */
-	uint32_t low_power_enable;	/*!< Enable or disable Low Power mode                                      
-									This parameter can be set to ENABLE or DISABLE                      */
-	uint32_t lpm_enable;		/*!< Enable or disable the Link Power Management .                                  
-									This parameter can be set to ENABLE or DISABLE                      */
-	uint32_t battery_charging_enable;	/*!< Enable or disable Battery charging.                                  
-											This parameter can be set to ENABLE or DISABLE                      */                                    
+	uint8_t dev_endpoints;				/*!< Device Endpoints number.
+											This parameter depends on the used USB core.   
+											This parameter must be a number between Min_Data = 1 and Max_Data = 15 */
+	uint8_t low_power_enable;			/*!< Enable or disable Low Power mode                                      
+											This parameter can be set to ENABLE or DISABLE                      */
 } PCD_InitTypeDef;
 
 typedef struct
@@ -137,19 +129,19 @@ typedef struct
 typedef   USB_TypeDef PCD_TypeDef; 
 
 /** 
-  * @brief  PCD Handle Structure definition  
+  * @brief  PCD Handle Structure definition
   */ 
 typedef struct
 {
-		PCD_TypeDef			*Instance;		/*!< Register base address */ 
+		PCD_TypeDef			*Instance;		/*!< Register base address */
 		PCD_InitTypeDef		Init;			/*!< PCD required parameters */
-__IO	uint8_t				USB_Address;	/*!< USB Address */  
+__IO	uint8_t				USB_Address;	/*!< USB Address */
 		PCD_EPTypeDef		IN_ep[8];		/*!< IN endpoint parameters */
 		PCD_EPTypeDef		OUT_ep[8];		/*!< OUT endpoint parameters */
 		HAL_LockTypeDef		Lock;			/*!< PCD peripheral status */
 __IO	PCD_StateTypeDef	State;			/*!< PCD communication state */
 		uint32_t			Setup[12];		/*!< Setup packet buffer */
-		void				*pData;			/*!< Pointer to upper stack Handler */    
+		void				*pData;			/*!< Pointer to upper stack Handler */
 } PCD_HandleTypeDef;
 
 /**

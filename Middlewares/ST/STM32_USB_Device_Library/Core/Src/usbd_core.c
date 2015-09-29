@@ -142,7 +142,6 @@ USBD_StatusTypeDef USBD_DeInit(USBD_HandleTypeDef *pdev)
 	return USBD_OK;
 }
 
-
 /**
  * @brief  USBD_RegisterClass 
  *         Link class driver to Device Core.
@@ -207,7 +206,6 @@ USBD_StatusTypeDef  USBD_RunTestMode (USBD_HandleTypeDef  *pdev)
 {
 	return USBD_OK;
 }
-
 
 /**
  * @brief  USBD_SetClassConfig 
@@ -387,127 +385,119 @@ USBD_StatusTypeDef USBD_LL_DataInStage(USBD_HandleTypeDef *pdev ,uint8_t epnum, 
  * @param  pdev: device instance
  * @retval status
  */
-
 USBD_StatusTypeDef USBD_LL_Reset(USBD_HandleTypeDef  *pdev)
 {
-  /* Open EP0 OUT */
-  USBD_LL_OpenEP(pdev,
-              0x00,
-              USBD_EP_TYPE_CTRL,
-              USB_MAX_EP0_SIZE);
-  
-  pdev->ep_out[0].maxpacket = USB_MAX_EP0_SIZE;
-  
-  /* Open EP0 IN */
-  USBD_LL_OpenEP(pdev,
-              0x80,
-              USBD_EP_TYPE_CTRL,
-              USB_MAX_EP0_SIZE);
-  
-  pdev->ep_in[0].maxpacket = USB_MAX_EP0_SIZE;
-  /* Upon Reset call user call back */
-  pdev->dev_state = USBD_STATE_DEFAULT;
-  
-  if (pdev->pClassData) 
-    pdev->pClass->DeInit(pdev, pdev->dev_config);  
- 
-  
-  return USBD_OK;
+	/* Open EP0 OUT */
+	USBD_LL_OpenEP(	pdev,
+					0x00,
+					USBD_EP_TYPE_CTRL,
+					USB_MAX_EP0_SIZE);
+
+	pdev->ep_out[0].maxpacket = USB_MAX_EP0_SIZE;
+
+	/* Open EP0 IN */
+	USBD_LL_OpenEP(	pdev,
+					0x80,
+					USBD_EP_TYPE_CTRL,
+					USB_MAX_EP0_SIZE);
+
+	pdev->ep_in[0].maxpacket = USB_MAX_EP0_SIZE;
+	/* Upon Reset call user call back */
+	pdev->dev_state = USBD_STATE_DEFAULT;
+
+	if (pdev->pClassData) 
+	pdev->pClass->DeInit(pdev, pdev->dev_config);  
+
+
+	return USBD_OK;
 }
 
 
 /**
-* @brief  USBD_Suspend 
-*         Handle Suspend event
-* @param  pdev: device instance
-* @retval status
-*/
-
+ * @brief  USBD_Suspend 
+ *         Handle Suspend event
+ * @param  pdev: device instance
+ * @retval status
+ */
 USBD_StatusTypeDef USBD_LL_Suspend(USBD_HandleTypeDef  *pdev)
 {
-  pdev->dev_old_state =  pdev->dev_state;
-  pdev->dev_state  = USBD_STATE_SUSPENDED;
-  return USBD_OK;
+	pdev->dev_old_state =  pdev->dev_state;
+	pdev->dev_state  = USBD_STATE_SUSPENDED;
+	return USBD_OK;
 }
 
 /**
-* @brief  USBD_Resume 
-*         Handle Resume event
-* @param  pdev: device instance
-* @retval status
-*/
-
+ * @brief  USBD_Resume 
+ *         Handle Resume event
+ * @param  pdev: device instance
+ * @retval status
+ */
 USBD_StatusTypeDef USBD_LL_Resume(USBD_HandleTypeDef  *pdev)
 {
-  pdev->dev_state = pdev->dev_old_state;  
-  return USBD_OK;
+	pdev->dev_state = pdev->dev_old_state;  
+	return USBD_OK;
 }
 
 /**
-* @brief  USBD_SOF 
-*         Handle SOF event
-* @param  pdev: device instance
-* @retval status
-*/
-
+ * @brief  USBD_SOF 
+ *         Handle SOF event
+ * @param  pdev: device instance
+ * @retval status
+ */
 USBD_StatusTypeDef USBD_LL_SOF(USBD_HandleTypeDef  *pdev)
 {
-  if (pdev->dev_state == USBD_STATE_CONFIGURED)
-  {
-    if (pdev->pClass->SOF != NULL)
-    {
-      pdev->pClass->SOF(pdev);
-    }
-  }
-  return USBD_OK;
+	if (pdev->dev_state == USBD_STATE_CONFIGURED)
+		if (pdev->pClass->SOF != NULL)
+			pdev->pClass->SOF(pdev);
+	return USBD_OK;
 }
 
 /**
-* @brief  USBD_IsoINIncomplete 
-*         Handle iso in incomplete event
-* @param  pdev: device instance
-* @retval status
-*/
+ * @brief  USBD_IsoINIncomplete 
+ *         Handle iso in incomplete event
+ * @param  pdev: device instance
+ * @retval status
+ */
 USBD_StatusTypeDef USBD_LL_IsoINIncomplete(USBD_HandleTypeDef  *pdev, uint8_t epnum)
 {
-  return USBD_OK;
+	return USBD_OK;
 }
 
 /**
-* @brief  USBD_IsoOUTIncomplete 
-*         Handle iso out incomplete event
-* @param  pdev: device instance
-* @retval status
-*/
+ * @brief  USBD_IsoOUTIncomplete 
+ *         Handle iso out incomplete event
+ * @param  pdev: device instance
+ * @retval status
+ */
 USBD_StatusTypeDef USBD_LL_IsoOUTIncomplete(USBD_HandleTypeDef  *pdev, uint8_t epnum)
 {
-  return USBD_OK;
+	return USBD_OK;
 }
 
 /**
-* @brief  USBD_DevConnected 
-*         Handle device connection event
-* @param  pdev: device instance
-* @retval status
-*/
+ * @brief  USBD_DevConnected 
+ *         Handle device connection event
+ * @param  pdev: device instance
+ * @retval status
+ */
 USBD_StatusTypeDef USBD_LL_DevConnected(USBD_HandleTypeDef  *pdev)
 {
-  return USBD_OK;
+	return USBD_OK;
 }
 
 /**
-* @brief  USBD_DevDisconnected 
-*         Handle device disconnection event
-* @param  pdev: device instance
-* @retval status
-*/
+ * @brief  USBD_DevDisconnected 
+ *         Handle device disconnection event
+ * @param  pdev: device instance
+ * @retval status
+ */
 USBD_StatusTypeDef USBD_LL_DevDisconnected(USBD_HandleTypeDef  *pdev)
 {
-  /* Free Class Resources */
-  pdev->dev_state = USBD_STATE_DEFAULT;
-  pdev->pClass->DeInit(pdev, pdev->dev_config);  
-   
-  return USBD_OK;
+	/* Free Class Resources */
+	pdev->dev_state = USBD_STATE_DEFAULT;
+	pdev->pClass->DeInit(pdev, pdev->dev_config);  
+
+	return USBD_OK;
 }
 /**
 * @}

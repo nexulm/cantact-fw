@@ -3,3 +3,5 @@ build/
 *.uvguix.*
 JLinkLog.txt
 JLinkSettings.ini
+*.tmp
+

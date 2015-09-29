@@ -44,7 +44,7 @@
 PCD_HandleTypeDef hpcd_USB_FS;
 
 /* USER CODE BEGIN 0 */
-__IO uint32_t remotewakeupon=0;
+
 /* USER CODE END 0 */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,43 +59,40 @@ void system_clock_config(void);
                        LL Driver Callbacks (PCD -> USB Device Library)
 *******************************************************************************/
 /* MSP Init */
-
 void HAL_PCD_MspInit(PCD_HandleTypeDef* hpcd)
 {
-  if (hpcd->Instance==USB)
-  {
-  /* USER CODE BEGIN USB_MspInit 0 */
+	if (hpcd->Instance == USB)
+	{
+		/* USER CODE BEGIN USB_MspInit 0 */
 
-  /* USER CODE END USB_MspInit 0 */
-    /* Peripheral clock enable */
-    __USB_CLK_ENABLE();
+		/* USER CODE END USB_MspInit 0 */
+		/* Peripheral clock enable */
+		__USB_CLK_ENABLE();
 
-    /* Peripheral interrupt init*/
-    HAL_NVIC_SetPriority(USB_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(USB_IRQn);
-  /* USER CODE BEGIN USB_MspInit 1 */
+		/* Peripheral interrupt init*/
+		HAL_NVIC_SetPriority(USB_IRQn, 0, 0);
+		HAL_NVIC_EnableIRQ(USB_IRQn);
+		/* USER CODE BEGIN USB_MspInit 1 */
 
-  /* USER CODE END USB_MspInit 1 */
-  }
+		/* USER CODE END USB_MspInit 1 */
+	}
 }
 
 void HAL_PCD_MspDeInit(PCD_HandleTypeDef* hpcd)
 {
-  if (hpcd->Instance==USB)
-  {
-  /* USER CODE BEGIN USB_MspDeInit 0 */
+	if (hpcd->Instance == USB)
+	{
+		/* USER CODE BEGIN USB_MspDeInit 0 */
+		/* USER CODE END USB_MspDeInit 0 */
+		/* Peripheral clock disable */
+		__USB_CLK_DISABLE();
 
-  /* USER CODE END USB_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __USB_CLK_DISABLE();
+		/* Peripheral interrupt Deinit*/
+		HAL_NVIC_DisableIRQ(USB_IRQn);
 
-    /* Peripheral interrupt Deinit*/
-    HAL_NVIC_DisableIRQ(USB_IRQn);
-
-  /* USER CODE BEGIN USB_MspDeInit 1 */
-
-  /* USER CODE END USB_MspDeInit 1 */
-  }
+		/* USER CODE BEGIN USB_MspDeInit 1 */
+		/* USER CODE END USB_MspDeInit 1 */
+	}
 }
 
 /**
@@ -105,7 +102,7 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* hpcd)
   */
 void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd)
 {
-  USBD_LL_SetupStage(hpcd->pData, (uint8_t *)hpcd->Setup);
+	USBD_LL_SetupStage(hpcd->pData, (uint8_t *)hpcd->Setup);
 }
 
 /**
@@ -116,7 +113,7 @@ void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd)
   */
 void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
 {
-  USBD_LL_DataOutStage(hpcd->pData, epnum, hpcd->OUT_ep[epnum].xfer_buff);
+	USBD_LL_DataOutStage(hpcd->pData, epnum, hpcd->OUT_ep[epnum].xfer_buff);
 }
 
 /**
@@ -127,7 +124,7 @@ void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
   */
 void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
 {
-  USBD_LL_DataInStage(hpcd->pData, epnum, hpcd->IN_ep[epnum].xfer_buff);
+	USBD_LL_DataInStage(hpcd->pData, epnum, hpcd->IN_ep[epnum].xfer_buff);
 }
 
 /**
@@ -137,7 +134,7 @@ void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
   */
 void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
 {
-  USBD_LL_SOF(hpcd->pData);
+	USBD_LL_SOF(hpcd->pData);
 }
 
 /**
@@ -151,96 +148,95 @@ void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
 }
 
 /**
-  * @brief  Suspend callback.
-  * When Low power mode is enabled the debug cannot be used (IAR, Keil doesn't support it)
-  * @param  hpcd: PCD handle
-  * @retval None
-  */
+ * @brief  Suspend callback.
+ * When Low power mode is enabled the debug cannot be used (IAR, Keil doesn't support it)
+ * @param  hpcd: PCD handle
+ * @retval None
+ */
 void HAL_PCD_SuspendCallback(PCD_HandleTypeDef *hpcd)
 {
-  /* Inform USB library that core enters in suspend Mode */
-  USBD_LL_Suspend(hpcd->pData);
-  /*Enter in STOP mode */
-  /* USER CODE BEGIN 2 */
-  if (hpcd->Init.low_power_enable)
-  {
-    /* Set SLEEPDEEP bit and SleepOnExit of Cortex System Control Register */
-    SCB->SCR |= (uint32_t)((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
-  }
-  /* USER CODE END 2 */
+	/* Inform USB library that core enters in suspend Mode */
+	USBD_LL_Suspend(hpcd->pData);
+	/* Enter in STOP mode */
+	/* USER CODE BEGIN 2 */
+	if (hpcd->Init.low_power_enable)
+	{
+		/* Set SLEEPDEEP bit and SleepOnExit of Cortex System Control Register */
+		SCB->SCR |= (uint32_t)((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
+	}
+	/* USER CODE END 2 */
 }
 
 /**
-  * @brief  Resume callback.
-  * When Low power mode is enabled the debug cannot be used (IAR, Keil doesn't support it)
-  * @param  hpcd: PCD handle
-  * @retval None
-  */
+ * @brief  Resume callback.
+ * When Low power mode is enabled the debug cannot be used (IAR, Keil doesn't support it)
+ * @param  hpcd: PCD handle
+ * @retval None
+ */
 void HAL_PCD_ResumeCallback(PCD_HandleTypeDef *hpcd)
 {
 	/* USER CODE BEGIN 3 */
-	if ((hpcd->Init.low_power_enable)&&(remotewakeupon == 0))
+	if (hpcd->Init.low_power_enable)
 	{
 		SystemClockConfig_Resume();
 		/* Reset SLEEPDEEP bit of Cortex System Control Register */
 		SCB->SCR &= (uint32_t)~((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
 	}
-	remotewakeupon = 0;
 	/* USER CODE END 3 */
 	USBD_LL_Resume(hpcd->pData);
 }
 
 /**
-  * @brief  ISOOUTIncomplete callback.
-  * @param  hpcd: PCD handle
-  * @param  epnum: Endpoint Number
-  * @retval None
-  */
+ * @brief  ISOOUTIncomplete callback.
+ * @param  hpcd: PCD handle
+ * @param  epnum: Endpoint Number
+ * @retval None
+ */
 void HAL_PCD_ISOOUTIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
 {
-  USBD_LL_IsoOUTIncomplete(hpcd->pData, epnum);
+	USBD_LL_IsoOUTIncomplete(hpcd->pData, epnum);
 }
 
 /**
-  * @brief  ISOINIncomplete callback.
-  * @param  hpcd: PCD handle
-  * @param  epnum: Endpoint Number
-  * @retval None
-  */
+ * @brief  ISOINIncomplete callback.
+ * @param  hpcd: PCD handle
+ * @param  epnum: Endpoint Number
+ * @retval None
+ */
 void HAL_PCD_ISOINIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
 {
-  USBD_LL_IsoINIncomplete(hpcd->pData, epnum);
+	USBD_LL_IsoINIncomplete(hpcd->pData, epnum);
 }
 
 /**
-  * @brief  ConnectCallback callback.
-  * @param  hpcd: PCD handle
-  * @retval None
-  */
+ * @brief  ConnectCallback callback.
+ * @param  hpcd: PCD handle
+ * @retval None
+ */
 void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
 {
-  USBD_LL_DevConnected(hpcd->pData);
+	USBD_LL_DevConnected(hpcd->pData);
 }
 
 /**
-  * @brief  Disconnect callback.
-  * @param  hpcd: PCD handle
-  * @retval None
-  */
+ * @brief  Disconnect callback.
+ * @param  hpcd: PCD handle
+ * @retval None
+ */
 void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
 {
-  USBD_LL_DevDisconnected(hpcd->pData);
+	USBD_LL_DevDisconnected(hpcd->pData);
 }
 
 /*******************************************************************************
                        LL Driver Interface (USB Device Library --> PCD)
 *******************************************************************************/
 /**
-  * @brief  Initializes the Low Level portion of the Device driver.
-  * @param  pdev: Device handle
-  * @retval USBD Status
-  */
-USBD_StatusTypeDef  USBD_LL_Init (USBD_HandleTypeDef *pdev)
+ * @brief  Initializes the Low Level portion of the Device driver.
+ * @param  pdev: Device handle
+ * @retval USBD Status
+ */
+USBD_StatusTypeDef  USBD_LL_Init(USBD_HandleTypeDef *pdev)
 {
 	/* Init USB_IP */
 	/* Link The driver to the stack */
@@ -250,9 +246,7 @@ USBD_StatusTypeDef  USBD_LL_Init (USBD_HandleTypeDef *pdev)
 	hpcd_USB_FS.Instance = USB;
 	hpcd_USB_FS.Init.dev_endpoints = 5;
 
-	hpcd_USB_FS.Init.ep0_mps = DEP0CTL_MPS_8;
 	hpcd_USB_FS.Init.low_power_enable = DISABLE;
-	hpcd_USB_FS.Init.battery_charging_enable = DISABLE;
 	HAL_PCD_Init(&hpcd_USB_FS);
 
 	HAL_PCDEx_PMAConfig(pdev->pData, 0x00, PCD_SNG_BUF, 0x18);
@@ -431,7 +425,7 @@ USBD_StatusTypeDef  USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev,
  * @param  ep_addr: Endpoint Number
  * @retval Recived Data Size
  */
-uint32_t USBD_LL_GetRxDataSize  (USBD_HandleTypeDef *pdev, uint8_t  ep_addr)  
+uint32_t USBD_LL_GetRxDataSize  (USBD_HandleTypeDef *pdev, uint8_t  ep_addr)
 {
 	return HAL_PCD_EP_GetRxCount(pdev->pData, ep_addr);
 }

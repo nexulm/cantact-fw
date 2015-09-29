@@ -77,59 +77,55 @@
   */
 
 /**
-  * @brief Configure PMA for EP
-  * @param  hpcd: PCD handle
-  * @param  ep_addr: endpoint address
-  * @param  ep_kind: endpoint Kind
-  *                @arg USB_SNG_BUF: Single Buffer used
-  *                @arg USB_DBL_BUF: Double Buffer used
-  * @param  pmaadress: EP address in The PMA: In case of single buffer endpoint
-  *                   this parameter is 16-bit value providing the address
-  *                   in PMA allocated to endpoint.
-  *                   In case of double buffer endpoint this parameter
-  *                   is a 32-bit value providing the endpoint buffer 0 address
-  *                   in the LSB part of 32-bit value and endpoint buffer 1 address
-  *                   in the MSB part of 32-bit value.
-  * @retval : status
-  */
-
-HAL_StatusTypeDef  HAL_PCDEx_PMAConfig(PCD_HandleTypeDef *hpcd, 
-                        uint16_t ep_addr,
-                        uint16_t ep_kind,
-                        uint32_t pmaadress)
-
+ * @brief Configure PMA for EP
+ * @param  hpcd: PCD handle
+ * @param  ep_addr: endpoint address
+ * @param  ep_kind: endpoint Kind
+ *                @arg USB_SNG_BUF: Single Buffer used
+ *                @arg USB_DBL_BUF: Double Buffer used
+ * @param  pmaadress: EP address in The PMA: In case of single buffer endpoint
+ *                   this parameter is 16-bit value providing the address
+ *                   in PMA allocated to endpoint.
+ *                   In case of double buffer endpoint this parameter
+ *                   is a 32-bit value providing the endpoint buffer 0 address
+ *                   in the LSB part of 32-bit value and endpoint buffer 1 address
+ *                   in the MSB part of 32-bit value.
+ * @retval : status
+ */
+HAL_StatusTypeDef  HAL_PCDEx_PMAConfig(
+	PCD_HandleTypeDef * hpcd,
+	uint16_t ep_addr,
+	uint16_t ep_kind,
+	uint32_t pmaadress)
 {
-  PCD_EPTypeDef *ep;
-  
-  /* initialize ep structure*/
-  if ((0x80 & ep_addr) == 0x80)
-  {
-    ep = &hpcd->IN_ep[ep_addr & 0x7F];
-  }
-  else
-  {
-    ep = &hpcd->OUT_ep[ep_addr];
-  }
-  
-  /* Here we check if the endpoint is single or double Buffer*/
-  if (ep_kind == PCD_SNG_BUF)
-  {
-    /*Single Buffer*/
-    ep->doublebuffer = 0;
-    /*Configure te PMA*/
-    ep->pmaadress = (uint16_t)pmaadress;
-  }
-  else /*USB_DBL_BUF*/
-  {
-    /*Double Buffer Endpoint*/
-    ep->doublebuffer = 1;
-    /*Configure the PMA*/
-    ep->pmaaddr0 =  pmaadress & 0xFFFF;
-    ep->pmaaddr1 =  (pmaadress & 0xFFFF0000) >> 16;
-  }
-  
-  return HAL_OK;
+	PCD_EPTypeDef *ep;
+
+	/* initialize ep structure*/
+	if ((0x80 & ep_addr) == 0x80)
+		ep = &hpcd->IN_ep[ep_addr & 0x7F];
+	else
+		ep = &hpcd->OUT_ep[ep_addr];
+
+	/* Here we check if the endpoint is single or double Buffer*/
+	if (ep_kind == PCD_SNG_BUF)
+	{
+		/* Single Buffer */
+		ep->doublebuffer = 0;
+		/* Configure te PMA */
+		ep->pmaadress = (uint16_t)pmaadress;
+	}
+	else /* PCD_DBL_BUF */
+	{
+		/* Double Buffer Endpoint */
+		ep->doublebuffer = 1;
+		/* Configure the PMA */
+		ep->pmaaddr0 =  pmaadress & 0xFFFF;
+		ep->pmaaddr1 =  (pmaadress & 0xFFFF0000) >> 16;
+	}
+
+	return HAL_OK;
 }
+
 /**
   * @}
   */

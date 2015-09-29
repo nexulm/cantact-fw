@@ -41,7 +41,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
-
+extern CAN_HandleTypeDef hcan;
 /******************************************************************************/
 /*            Cortex-M0 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
@@ -67,6 +67,14 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f0xx.s).                    */
 /******************************************************************************/
+
+/**
+* @brief This function handles CAN global interrupt.
+*/
+void CEC_CAN_IRQHandler(void)
+{
+	HAL_CAN_IRQHandler(&hcan);
+}
 
 /**
 * @brief This function handles USB global Interrupt (combined with EXTI line 18 interrupt).
