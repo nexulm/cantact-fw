@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_pwr_ex.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   Header file of PWR HAL Extension module.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -92,8 +92,8 @@ typedef struct
 /** @defgroup PWREx_WakeUp_Pins PWREx Wakeup Pins
   * @{
   */
-#if defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
-    defined (STM32F091xC) || defined (STM32F098xx)
+#if defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || defined (STM32F070xB) || \
+    defined (STM32F091xC) || defined (STM32F098xx) || defined (STM32F030xC)
 #define PWR_WAKEUP_PIN1                     ((uint32_t)0x00)
 #define PWR_WAKEUP_PIN2                     ((uint32_t)0x01)
 #define PWR_WAKEUP_PIN3                     ((uint32_t)0x02)
@@ -117,8 +117,8 @@ typedef struct
 
 #define IS_PWR_WAKEUP_PIN(PIN) (((PIN) == PWR_WAKEUP_PIN1) || \
                                 ((PIN) == PWR_WAKEUP_PIN2))
-#endif /* defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || */
-       /* defined (STM32F091xC) || defined (STM32F098xx) */
+#endif /* defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || defined (STM32F070xB) || */
+       /* defined (STM32F091xC) || defined (STM32F098xx) || defined (STM32F030xC) */
 /**
   * @}
   */
@@ -142,9 +142,9 @@ typedef struct
 
 #define PWR_EXTI_LINE_VDDIO2                ((uint32_t)0x80000000)  /*!< External interrupt line 31 Connected to the Vddio2 Monitor EXTI Line */
 
-#endif /* defined (STM32F042x6) || defined (STM32F048xx) || \
+#endif /* defined (STM32F042x6) || defined (STM32F048xx) ||\
           defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
-          defined (STM32F091xC) || defined (STM32F098xx) */
+          defined (STM32F091xC) || defined (STM32F098xx) ||*/
 /**
   * @}
   */
@@ -203,6 +203,10 @@ typedef struct
 #define PWR_FLAG_WU                         PWR_CSR_WUF
 #define PWR_FLAG_SB                         PWR_CSR_SBF
 #define PWR_FLAG_PVDO                       PWR_CSR_PVDO
+#define PWR_FLAG_VREFINTRDY                 PWR_CSR_VREFINTRDYF
+#elif defined (STM32F070x6) || defined (STM32F070xB) || defined (STM32F030xC)
+#define PWR_FLAG_WU                         PWR_CSR_WUF
+#define PWR_FLAG_SB                         PWR_CSR_SBF
 #define PWR_FLAG_VREFINTRDY                 PWR_CSR_VREFINTRDYF
 #else
 #define PWR_FLAG_WU                         PWR_CSR_WUF
@@ -339,7 +343,7 @@ typedef struct
 #define __HAL_PWR_VDDIO2_EXTI_GENERATE_SWIT()         (EXTI->SWIER |= (PWR_EXTI_LINE_VDDIO2))
 
 
-#endif /* defined (STM32F042x6) || defined (STM32F048xx) || \
+#endif /* defined (STM32F042x6) || defined (STM32F048xx) ||\
           defined (STM32F071xB) || defined (STM32F072xB) || defined (STM32F078xx) || \
           defined (STM32F091xC) || defined (STM32F098xx) */
 
@@ -418,4 +422,5 @@ void HAL_PWR_DisableVddio2Monitor(void);
 #endif /* __STM32F0xx_HAL_PWR_EX_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
 

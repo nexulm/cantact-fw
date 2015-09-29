@@ -1,11 +1,10 @@
 /**
   ******************************************************************************
   * @file    stm32f0xx_it.c
-  * @date    05/12/2014 20:22:27
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2014 STMicroelectronics
+  * COPYRIGHT(c) 2015 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -35,11 +34,12 @@
 #include "stm32f0xx_hal.h"
 #include "stm32f0xx.h"
 #include "stm32f0xx_it.h"
+
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
-/* External variables --------------------------------------------------------*/
 
+/* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
 
 /******************************************************************************/
@@ -47,32 +47,39 @@ extern PCD_HandleTypeDef hpcd_USB_FS;
 /******************************************************************************/
 
 /**
-* @brief This function handles USB global Interrupt (combined with EXTI line 18).
-*/
-void USB_IRQHandler(void)
-{
-  /* USER CODE BEGIN USB_IRQn 0 */
-
-  /* USER CODE END USB_IRQn 0 */
-  HAL_PCD_IRQHandler(&hpcd_USB_FS);
-  /* USER CODE BEGIN USB_IRQn 1 */
-
-  /* USER CODE END USB_IRQn 1 */
-}
-
-/**
 * @brief This function handles System tick timer.
 */
 void SysTick_Handler(void)
 {
-  /* USER CODE BEGIN SysTick_IRQn 0 */
+	/* USER CODE BEGIN SysTick_IRQn 0 */
 
-  /* USER CODE END SysTick_IRQn 0 */
-  HAL_IncTick();
-  HAL_SYSTICK_IRQHandler();
-  /* USER CODE BEGIN SysTick_IRQn 1 */
+	/* USER CODE END SysTick_IRQn 0 */
+	HAL_IncTick();
+	HAL_SYSTICK_IRQHandler();
+	/* USER CODE BEGIN SysTick_IRQn 1 */
 
-  /* USER CODE END SysTick_IRQn 1 */
+	/* USER CODE END SysTick_IRQn 1 */
+}
+
+/******************************************************************************/
+/* STM32F0xx Peripheral Interrupt Handlers                                    */
+/* Add here the Interrupt Handlers for the used peripherals.                  */
+/* For the available peripheral interrupt handler names,                      */
+/* please refer to the startup file (startup_stm32f0xx.s).                    */
+/******************************************************************************/
+
+/**
+* @brief This function handles USB global Interrupt (combined with EXTI line 18 interrupt).
+*/
+void USB_IRQHandler(void)
+{
+	/* USER CODE BEGIN USB_IRQn 0 */
+
+	/* USER CODE END USB_IRQn 0 */
+	HAL_PCD_IRQHandler(&hpcd_USB_FS);
+	/* USER CODE BEGIN USB_IRQn 1 */
+
+	/* USER CODE END USB_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

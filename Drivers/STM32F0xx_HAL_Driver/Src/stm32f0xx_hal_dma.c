@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_dma.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   DMA HAL module driver.
   *    
   *         This file provides firmware functions to manage the following 
@@ -73,7 +73,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -535,7 +535,7 @@ void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
       /* Process Unlocked */
       __HAL_UNLOCK(hdma); 
     
-      if (hdma->XferErrorCallback != NULL)
+      if (hdma->XferErrorCallback != (void (*)(DMA_HandleTypeDef *))NULL)
       {
         /* Transfer error callback */
         hdma->XferErrorCallback(hdma);
@@ -560,7 +560,7 @@ void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
       /* Change DMA peripheral state */
       hdma->State = HAL_DMA_STATE_READY_HALF;
 
-      if(hdma->XferHalfCpltCallback != NULL)
+      if(hdma->XferHalfCpltCallback != (void (*)(DMA_HandleTypeDef *))NULL)
       {
         /* Half transfer callback */
         hdma->XferHalfCpltCallback(hdma);
@@ -590,7 +590,7 @@ void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
       /* Process Unlocked */
       __HAL_UNLOCK(hdma);
     
-      if(hdma->XferCpltCallback != NULL)
+      if(hdma->XferCpltCallback != (void (*)(DMA_HandleTypeDef *))NULL)
       {       
         /* Transfer complete callback */
         hdma->XferCpltCallback(hdma);

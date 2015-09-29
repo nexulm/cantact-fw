@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_crc_ex.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   Extended CRC HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the CRC peripheral:
@@ -25,7 +25,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -104,7 +104,7 @@
   */             
 HAL_StatusTypeDef HAL_CRCEx_Init(CRC_HandleTypeDef *hcrc)
 {
-#if defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || defined(STM32F091xC) || defined (STM32F098xx)    
+#if defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || defined(STM32F091xC) || defined (STM32F098xx)
   /* check whether or not non-default generating polynomial has been 
    * picked up by user */
   assert_param(IS_DEFAULT_POLYNOMIAL(hcrc->Init.DefaultPolynomialUse)); 

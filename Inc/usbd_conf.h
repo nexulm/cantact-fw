@@ -1,11 +1,10 @@
 /**
   ******************************************************************************
   * @file           : usbd_conf.h
-  * @date           : 05/12/2014 20:22:27
   * @version        : v1.0_Cube
   * @brief          : Header for usbd_conf file.
   ******************************************************************************
-  * COPYRIGHT(c) 2014 STMicroelectronics
+  * COPYRIGHT(c) 2015 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -34,6 +33,9 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USBD_CONF__H__
 #define __USBD_CONF__H__
+#ifdef __cplusplus
+ extern "C" {
+#endif
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,15 +47,15 @@
 /** @addtogroup USBD_OTG_DRIVER
   * @{
   */
-
+  
 /** @defgroup USBD_CONF
   * @brief usb otg low level driver configuration file
   * @{
-  */
+  */ 
 
 /** @defgroup USBD_CONF_Exported_Defines
   * @{
-  */
+  */ 
 
 /*---------- -----------*/
 #define USBD_MAX_NUM_INTERFACES     1
@@ -68,101 +70,105 @@
 /*---------- -----------*/
 #define USBD_SELF_POWERED     1
 /*---------- -----------*/
-#define USBD_CDC_INTERVAL     1000
+#define USBD_CDC_INTERVAL     10
 /*---------- -----------*/
-#define MAX_STATIC_ALLOC_SIZE     256
+#define MAX_STATIC_ALLOC_SIZE     512
 /****************************************/
 /* #define for FS and HS identification */
-#define DEVICE_FS		0
+#define DEVICE_FS 		0
 
 /** @defgroup USBD_Exported_Macros
   * @{
-  */
+  */ 
 
-/* Memory management macros */
+/* Memory management macros */  
 #define USBD_malloc               (uint32_t *)USBD_static_malloc
 #define USBD_free                 USBD_static_free
 #define USBD_memset               /* Not used */
 #define USBD_memcpy               /* Not used */
 
 #define USBD_Delay   HAL_Delay
-
- /* DEBUG macros */
+    
+ /* DEBUG macros */  
 
 #if (USBD_DEBUG_LEVEL > 0)
 #define  USBD_UsrLog(...)   printf(__VA_ARGS__);\
-			    printf("\n");
+                            printf("\n");
 #else
-#define USBD_UsrLog(...)
-#endif
-
-
+#define USBD_UsrLog(...)   
+#endif 
+                            
+                            
 #if (USBD_DEBUG_LEVEL > 1)
 
 #define  USBD_ErrLog(...)   printf("ERROR: ") ;\
-			    printf(__VA_ARGS__);\
-			    printf("\n");
+                            printf(__VA_ARGS__);\
+                            printf("\n");
 #else
-#define USBD_ErrLog(...)
-#endif
-
-
-#if (USBD_DEBUG_LEVEL > 2)
+#define USBD_ErrLog(...)   
+#endif 
+                            
+                            
+#if (USBD_DEBUG_LEVEL > 2)                         
 #define  USBD_DbgLog(...)   printf("DEBUG : ") ;\
-			    printf(__VA_ARGS__);\
-			    printf("\n");
+                            printf(__VA_ARGS__);\
+                            printf("\n");
 #else
-#define USBD_DbgLog(...)
+#define USBD_DbgLog(...)                         
 #endif
-
+                            
 /**
   * @}
-  */
-
-
-
+  */ 
+ 
+    
+    
 /**
   * @}
-  */
+  */ 
 
 /** @defgroup USBD_CONF_Exported_Types
   * @{
-  */
+  */ 
 /**
   * @}
-  */
+  */ 
 
 /** @defgroup USBD_CONF_Exported_Macros
   * @{
-  */
+  */ 
 /**
   * @}
-  */
+  */ 
 
 /** @defgroup USBD_CONF_Exported_Variables
   * @{
-  */
+  */ 
 /**
   * @}
-  */
+  */ 
 
 /** @defgroup USBD_CONF_Exported_FunctionsPrototype
   * @{
-  */
+  */ 
 /**
   * @}
-  */
+  */ 
 /* Exported functions ------------------------------------------------------- */
 void *USBD_static_malloc(uint32_t size);
 void USBD_static_free(void *p);
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__USBD_CONF__H__
 
 /**
   * @}
-  */
+  */ 
 
 /**
   * @}
-  */
+  */ 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

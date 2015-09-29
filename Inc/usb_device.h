@@ -1,11 +1,10 @@
 /**
   ******************************************************************************
   * @file           : USB_DEVICE
-  * @date           : 05/12/2014 20:22:27  
   * @version        : v1.0_Cube
   * @brief          : Header for usb_device file.
   ******************************************************************************
-  * COPYRIGHT(c) 2014 STMicroelectronics
+  * COPYRIGHT(c) 2015 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -46,7 +45,7 @@
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 /* USB_Device init function */	
-void MX_USB_DEVICE_Init(void);
+void usb_device_init(void);
 
 #ifdef __cplusplus
 }

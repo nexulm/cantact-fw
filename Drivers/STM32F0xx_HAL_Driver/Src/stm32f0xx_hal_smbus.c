@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_smbus.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   SMBUS HAL module driver.
   *    
   *          This file provides firmware functions to manage the following 
@@ -12,7 +12,6 @@
   *           + Initialization and de-initialization functions
   *           + IO operation functions
   *           + Peripheral State and Errors functions
-  *         
   @verbatim
   ==============================================================================
                         ##### How to use this driver #####
@@ -98,7 +97,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -1280,7 +1279,7 @@ __weak void HAL_SMBUS_SlaveListenCpltCallback(SMBUS_HandleTypeDef *hsmbus)
   * @param  hsmbus : SMBUS handle
   * @retval HAL state
   */
-HAL_SMBUS_StateTypeDef HAL_SMBUS_GetState(SMBUS_HandleTypeDef *hsmbus)
+uint32_t HAL_SMBUS_GetState(SMBUS_HandleTypeDef *hsmbus)
 {
   return hsmbus->State;
 }

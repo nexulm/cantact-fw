@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f098xx.h
   * @author  MCD Application Team
-  * @version V2.1.0
-  * @date    03-Oct-2014
+  * @version V2.2.1
+  * @date    09-January-2015
   * @brief   CMSIS STM32F098xx devices Peripheral Access Layer Header File.
   *
   *          This file contains:
@@ -14,7 +14,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -326,7 +326,7 @@ typedef struct
   __IO uint32_t ISR;          /*!< DMA interrupt status register,                            Address offset: 0x00 */
   __IO uint32_t IFCR;         /*!< DMA interrupt flag clear register,                        Address offset: 0x04 */
   uint32_t      RESERVED0[40];/*!< Reserved as declared by channel typedef                         0x08 - 0xA4*/
-  __IO uint32_t RMPCR;        /*!< Remap control register,                                      Address offset: 0xA8 */
+  __IO uint32_t CSELR;        /*!< Channel selection register,                               Address offset: 0xA8 */
 }DMA_TypeDef;
 
 /** 
@@ -510,24 +510,15 @@ typedef struct
 
 typedef struct
 {
-  __IO uint16_t CR1;      /*!< SPI Control register 1 (not used in I2S mode),       Address offset: 0x00 */
-  uint16_t  RESERVED0;    /*!< Reserved, 0x02                                                            */
-  __IO uint16_t CR2;      /*!< SPI Control register 2,                              Address offset: 0x04 */
-  uint16_t  RESERVED1;    /*!< Reserved, 0x06                                                            */
-  __IO uint16_t SR;       /*!< SPI Status register,                                 Address offset: 0x08 */
-  uint16_t  RESERVED2;    /*!< Reserved, 0x0A                                                            */
-  __IO uint16_t DR;       /*!< SPI data register,                                   Address offset: 0x0C */
-  uint16_t  RESERVED3;    /*!< Reserved, 0x0E                                                            */
-  __IO uint16_t CRCPR;    /*!< SPI CRC polynomial register (not used in I2S mode),  Address offset: 0x10 */
-  uint16_t  RESERVED4;    /*!< Reserved, 0x12                                                            */
-  __IO uint16_t RXCRCR;   /*!< SPI Rx CRC register (not used in I2S mode),          Address offset: 0x14 */
-  uint16_t  RESERVED5;    /*!< Reserved, 0x16                                                            */
-  __IO uint16_t TXCRCR;   /*!< SPI Tx CRC register (not used in I2S mode),          Address offset: 0x18 */
-  uint16_t  RESERVED6;    /*!< Reserved, 0x1A                                                            */ 
-  __IO uint16_t I2SCFGR;  /*!< SPI_I2S configuration register,                      Address offset: 0x1C */
-  uint16_t  RESERVED7;    /*!< Reserved, 0x1E                                                            */
-  __IO uint16_t I2SPR;    /*!< SPI_I2S prescaler register,                          Address offset: 0x20 */
-  uint16_t  RESERVED8;    /*!< Reserved, 0x22                                                            */    
+  __IO uint32_t CR1;      /*!< SPI Control register 1 (not used in I2S mode),       Address offset: 0x00 */
+  __IO uint32_t CR2;      /*!< SPI Control register 2,                              Address offset: 0x04 */
+  __IO uint32_t SR;       /*!< SPI Status register,                                 Address offset: 0x08 */
+  __IO uint32_t DR;       /*!< SPI data register,                                   Address offset: 0x0C */
+  __IO uint32_t CRCPR;    /*!< SPI CRC polynomial register (not used in I2S mode),  Address offset: 0x10 */
+  __IO uint32_t RXCRCR;   /*!< SPI Rx CRC register (not used in I2S mode),          Address offset: 0x14 */
+  __IO uint32_t TXCRCR;   /*!< SPI Tx CRC register (not used in I2S mode),          Address offset: 0x18 */
+  __IO uint32_t I2SCFGR;  /*!< SPI_I2S configuration register,                      Address offset: 0x1C */
+  __IO uint32_t I2SPR;    /*!< SPI_I2S prescaler register,                          Address offset: 0x20 */
 }SPI_TypeDef;
 
 /**
@@ -2600,160 +2591,160 @@ typedef struct
 /******************  Bit definition for DMA_CMAR register  ********************/
 #define  DMA_CMAR_MA                         ((uint32_t)0xFFFFFFFF)        /*!< Memory Address                      */
 
-/******************  Bit definition for DMA_RMPCR1 register  ********************/
-#define DMA_RMPCR1_DEFAULT                  ((uint32_t)0x00000000)        /*!< Default remap position for DMA1 */
-#define DMA_RMPCR1_CH1_ADC                  ((uint32_t)0x00000001)        /*!< Remap ADC on DMA1 Channel 1*/
-#define DMA_RMPCR1_CH1_TIM17_CH1            ((uint32_t)0x00000007)        /*!< Remap TIM17 channel 1 on DMA1 channel 1 */
-#define DMA_RMPCR1_CH1_TIM17_UP             ((uint32_t)0x00000007)        /*!< Remap TIM17 up on DMA1 channel 1 */
-#define DMA_RMPCR1_CH1_USART1_RX            ((uint32_t)0x00000008)        /*!< Remap USART1 Rx on DMA1 channel 1 */
-#define DMA_RMPCR1_CH1_USART2_RX            ((uint32_t)0x00000009)        /*!< Remap USART2 Rx on DMA1 channel 1 */
-#define DMA_RMPCR1_CH1_USART3_RX            ((uint32_t)0x0000000A)        /*!< Remap USART3 Rx on DMA1 channel 1 */
-#define DMA_RMPCR1_CH1_USART4_RX            ((uint32_t)0x0000000B)        /*!< Remap USART4 Rx on DMA1 channel 1 */
-#define DMA_RMPCR1_CH1_USART5_RX            ((uint32_t)0x0000000C)        /*!< Remap USART5 Rx on DMA1 channel 1 */
-#define DMA_RMPCR1_CH1_USART6_RX            ((uint32_t)0x0000000D)        /*!< Remap USART6 Rx on DMA1 channel 1 */
-#define DMA_RMPCR1_CH1_USART7_RX            ((uint32_t)0x0000000E)        /*!< Remap USART7 Rx on DMA1 channel 1 */
-#define DMA_RMPCR1_CH1_USART8_RX            ((uint32_t)0x0000000F)        /*!< Remap USART8 Rx on DMA1 channel 1 */
-#define DMA_RMPCR1_CH2_ADC                  ((uint32_t)0x00000010)        /*!< Remap ADC on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_I2C1_TX              ((uint32_t)0x00000020)        /*!< Remap I2C1 Tx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_SPI1_RX              ((uint32_t)0x00000030)        /*!< Remap SPI1 Rx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_TIM1_CH1             ((uint32_t)0x00000040)        /*!< Remap TIM1 channel 1 on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_TIM17_CH1            ((uint32_t)0x00000070)        /*!< Remap TIM17 channel 1 on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_TIM17_UP             ((uint32_t)0x00000070)        /*!< Remap TIM17 up on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_USART1_TX            ((uint32_t)0x00000080)        /*!< Remap USART1 Tx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_USART2_TX            ((uint32_t)0x00000090)        /*!< Remap USART2 Tx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_USART3_TX            ((uint32_t)0x000000A0)        /*!< Remap USART3 Tx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_USART4_TX            ((uint32_t)0x000000B0)        /*!< Remap USART4 Tx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_USART5_TX            ((uint32_t)0x000000C0)        /*!< Remap USART5 Tx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_USART6_TX            ((uint32_t)0x000000D0)        /*!< Remap USART6 Tx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_USART7_TX            ((uint32_t)0x000000E0)        /*!< Remap USART7 Tx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH2_USART8_TX            ((uint32_t)0x000000F0)        /*!< Remap USART8 Tx on DMA1 channel 2 */
-#define DMA_RMPCR1_CH3_TIM6_UP              ((uint32_t)0x00000100)        /*!< Remap TIM6 up on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_DAC_CH1              ((uint32_t)0x00000100)        /*!< Remap DAC Channel 1on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_I2C1_RX              ((uint32_t)0x00000200)        /*!< Remap I2C1 Rx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_SPI1_TX              ((uint32_t)0x00000300)        /*!< Remap SPI1 Tx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_TIM1_CH2             ((uint32_t)0x00000400)        /*!< Remap TIM1 channel 2 on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_TIM2_CH2             ((uint32_t)0x00000500)        /*!< Remap TIM2 channel 2 on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_TIM16_CH1            ((uint32_t)0x00000700)        /*!< Remap TIM16 channel 1 on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_TIM16_UP             ((uint32_t)0x00000700)        /*!< Remap TIM16 up on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_USART1_RX            ((uint32_t)0x00000800)        /*!< Remap USART1 Rx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_USART2_RX            ((uint32_t)0x00000900)        /*!< Remap USART2 Rx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_USART3_RX            ((uint32_t)0x00000A00)        /*!< Remap USART3 Rx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_USART4_RX            ((uint32_t)0x00000B00)        /*!< Remap USART4 Rx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_USART5_RX            ((uint32_t)0x00000C00)        /*!< Remap USART5 Rx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_USART6_RX            ((uint32_t)0x00000D00)        /*!< Remap USART6 Rx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_USART7_RX            ((uint32_t)0x00000E00)        /*!< Remap USART7 Rx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH3_USART8_RX            ((uint32_t)0x00000F00)        /*!< Remap USART8 Rx on DMA1 channel 3 */
-#define DMA_RMPCR1_CH4_TIM7_UP              ((uint32_t)0x00001000)        /*!< Remap TIM7 up on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_DAC_CH2              ((uint32_t)0x00001000)        /*!< Remap DAC Channel 2 on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_I2C2_TX              ((uint32_t)0x00002000)        /*!< Remap I2C2 Tx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_SPI2_RX              ((uint32_t)0x00003000)        /*!< Remap SPI2 Rx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_TIM2_CH4             ((uint32_t)0x00005000)        /*!< Remap TIM2 channel 4 on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_TIM3_CH1             ((uint32_t)0x00006000)        /*!< Remap TIM3 channel 1 on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_TIM3_TRIG            ((uint32_t)0x00006000)        /*!< Remap TIM3 Trig on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_TIM16_CH1            ((uint32_t)0x00007000)        /*!< Remap TIM16 channel 1 on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_TIM16_UP             ((uint32_t)0x00007000)        /*!< Remap TIM16 up on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_USART1_TX            ((uint32_t)0x00008000)        /*!< Remap USART1 Tx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_USART2_TX            ((uint32_t)0x00009000)        /*!< Remap USART2 Tx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_USART3_TX            ((uint32_t)0x0000A000)        /*!< Remap USART3 Tx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_USART4_TX            ((uint32_t)0x0000B000)        /*!< Remap USART4 Tx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_USART5_TX            ((uint32_t)0x0000C000)        /*!< Remap USART5 Tx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_USART6_TX            ((uint32_t)0x0000D000)        /*!< Remap USART6 Tx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_USART7_TX            ((uint32_t)0x0000E000)        /*!< Remap USART7 Tx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH4_USART8_TX            ((uint32_t)0x0000F000)        /*!< Remap USART8 Tx on DMA1 channel 4 */
-#define DMA_RMPCR1_CH5_I2C2_RX              ((uint32_t)0x00020000)        /*!< Remap I2C2 Rx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_SPI2_TX              ((uint32_t)0x00030000)        /*!< Remap SPI1 Tx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_TIM1_CH3             ((uint32_t)0x00040000)        /*!< Remap TIM1 channel 3 on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_USART1_RX            ((uint32_t)0x00080000)        /*!< Remap USART1 Rx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_USART2_RX            ((uint32_t)0x00090000)        /*!< Remap USART2 Rx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_USART3_RX            ((uint32_t)0x000A0000)        /*!< Remap USART3 Rx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_USART4_RX            ((uint32_t)0x000B0000)        /*!< Remap USART4 Rx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_USART5_RX            ((uint32_t)0x000C0000)        /*!< Remap USART5 Rx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_USART6_RX            ((uint32_t)0x000D0000)        /*!< Remap USART6 Rx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_USART7_RX            ((uint32_t)0x000E0000)        /*!< Remap USART7 Rx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH5_USART8_RX            ((uint32_t)0x000F0000)        /*!< Remap USART8 Rx on DMA1 channel 5 */
-#define DMA_RMPCR1_CH6_I2C1_TX              ((uint32_t)0x00200000)        /*!< Remap I2C1 Tx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_SPI2_RX              ((uint32_t)0x00300000)        /*!< Remap SPI2 Rx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_TIM1_CH1             ((uint32_t)0x00400000)        /*!< Remap TIM1 channel 1 on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_TIM1_CH2             ((uint32_t)0x00400000)        /*!< Remap TIM1 channel 2 on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_TIM1_CH3             ((uint32_t)0x00400000)        /*!< Remap TIM1 channel 3 on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_TIM3_CH1             ((uint32_t)0x00600000)        /*!< Remap TIM3 channel 1 on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_TIM3_TRIG            ((uint32_t)0x00600000)        /*!< Remap TIM3 Trig on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_TIM16_CH1            ((uint32_t)0x00700000)        /*!< Remap TIM16 channel 1 on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_TIM16_UP             ((uint32_t)0x00700000)        /*!< Remap TIM16 up on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_USART1_RX            ((uint32_t)0x00800000)        /*!< Remap USART1 Rx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_USART2_RX            ((uint32_t)0x00900000)        /*!< Remap USART2 Rx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_USART3_RX            ((uint32_t)0x00A00000)        /*!< Remap USART3 Rx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_USART4_RX            ((uint32_t)0x00B00000)        /*!< Remap USART4 Rx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_USART5_RX            ((uint32_t)0x00C00000)        /*!< Remap USART5 Rx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_USART6_RX            ((uint32_t)0x00D00000)        /*!< Remap USART6 Rx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_USART7_RX            ((uint32_t)0x00E00000)        /*!< Remap USART7 Rx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH6_USART8_RX            ((uint32_t)0x00F00000)        /*!< Remap USART8 Rx on DMA1 channel 6 */
-#define DMA_RMPCR1_CH7_I2C1_RX              ((uint32_t)0x02000000)        /*!< Remap I2C1 Rx on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_SPI2_TX              ((uint32_t)0x03000000)        /*!< Remap SPI2 Tx on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_TIM2_CH2             ((uint32_t)0x05000000)        /*!< Remap TIM2 channel 2 on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_TIM2_CH4             ((uint32_t)0x05000000)        /*!< Remap TIM2 channel 4 on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_TIM17_CH1            ((uint32_t)0x07000000)        /*!< Remap TIM17 channel 1 on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_TIM17_UP             ((uint32_t)0x07000000)        /*!< Remap TIM17 up on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_USART1_TX            ((uint32_t)0x08000000)        /*!< Remap USART1 Tx on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_USART2_TX            ((uint32_t)0x09000000)        /*!< Remap USART2 Tx on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_USART3_TX            ((uint32_t)0x0A000000)        /*!< Remap USART3 Tx on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_USART4_TX            ((uint32_t)0x0B000000)        /*!< Remap USART4 Tx on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_USART5_TX            ((uint32_t)0x0C000000)        /*!< Remap USART5 Tx on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_USART6_TX            ((uint32_t)0x0D000000)        /*!< Remap USART6 Tx on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_USART7_TX            ((uint32_t)0x0E000000)        /*!< Remap USART7 Tx on DMA1 channel 7 */
-#define DMA_RMPCR1_CH7_USART8_TX            ((uint32_t)0x0F000000)        /*!< Remap USART8 Tx on DMA1 channel 7 */
+/******************  Bit definition for DMA1_CSELR register  ********************/
+#define DMA1_CSELR_DEFAULT                  ((uint32_t)0x00000000)        /*!< Default remap position for DMA1 */
+#define DMA1_CSELR_CH1_ADC                  ((uint32_t)0x00000001)        /*!< Remap ADC on DMA1 Channel 1*/
+#define DMA1_CSELR_CH1_TIM17_CH1            ((uint32_t)0x00000007)        /*!< Remap TIM17 channel 1 on DMA1 channel 1 */
+#define DMA1_CSELR_CH1_TIM17_UP             ((uint32_t)0x00000007)        /*!< Remap TIM17 up on DMA1 channel 1 */
+#define DMA1_CSELR_CH1_USART1_RX            ((uint32_t)0x00000008)        /*!< Remap USART1 Rx on DMA1 channel 1 */
+#define DMA1_CSELR_CH1_USART2_RX            ((uint32_t)0x00000009)        /*!< Remap USART2 Rx on DMA1 channel 1 */
+#define DMA1_CSELR_CH1_USART3_RX            ((uint32_t)0x0000000A)        /*!< Remap USART3 Rx on DMA1 channel 1 */
+#define DMA1_CSELR_CH1_USART4_RX            ((uint32_t)0x0000000B)        /*!< Remap USART4 Rx on DMA1 channel 1 */
+#define DMA1_CSELR_CH1_USART5_RX            ((uint32_t)0x0000000C)        /*!< Remap USART5 Rx on DMA1 channel 1 */
+#define DMA1_CSELR_CH1_USART6_RX            ((uint32_t)0x0000000D)        /*!< Remap USART6 Rx on DMA1 channel 1 */
+#define DMA1_CSELR_CH1_USART7_RX            ((uint32_t)0x0000000E)        /*!< Remap USART7 Rx on DMA1 channel 1 */
+#define DMA1_CSELR_CH1_USART8_RX            ((uint32_t)0x0000000F)        /*!< Remap USART8 Rx on DMA1 channel 1 */
+#define DMA1_CSELR_CH2_ADC                  ((uint32_t)0x00000010)        /*!< Remap ADC on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_I2C1_TX              ((uint32_t)0x00000020)        /*!< Remap I2C1 Tx on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_SPI1_RX              ((uint32_t)0x00000030)        /*!< Remap SPI1 Rx on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_TIM1_CH1             ((uint32_t)0x00000040)        /*!< Remap TIM1 channel 1 on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_TIM17_CH1            ((uint32_t)0x00000070)        /*!< Remap TIM17 channel 1 on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_TIM17_UP             ((uint32_t)0x00000070)        /*!< Remap TIM17 up on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_USART1_TX            ((uint32_t)0x00000080)        /*!< Remap USART1 Tx on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_USART2_TX            ((uint32_t)0x00000090)        /*!< Remap USART2 Tx on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_USART3_TX            ((uint32_t)0x000000A0)        /*!< Remap USART3 Tx on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_USART4_TX            ((uint32_t)0x000000B0)        /*!< Remap USART4 Tx on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_USART5_TX            ((uint32_t)0x000000C0)        /*!< Remap USART5 Tx on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_USART6_TX            ((uint32_t)0x000000D0)        /*!< Remap USART6 Tx on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_USART7_TX            ((uint32_t)0x000000E0)        /*!< Remap USART7 Tx on DMA1 channel 2 */
+#define DMA1_CSELR_CH2_USART8_TX            ((uint32_t)0x000000F0)        /*!< Remap USART8 Tx on DMA1 channel 2 */
+#define DMA1_CSELR_CH3_TIM6_UP              ((uint32_t)0x00000100)        /*!< Remap TIM6 up on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_DAC_CH1              ((uint32_t)0x00000100)        /*!< Remap DAC Channel 1on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_I2C1_RX              ((uint32_t)0x00000200)        /*!< Remap I2C1 Rx on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_SPI1_TX              ((uint32_t)0x00000300)        /*!< Remap SPI1 Tx on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_TIM1_CH2             ((uint32_t)0x00000400)        /*!< Remap TIM1 channel 2 on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_TIM2_CH2             ((uint32_t)0x00000500)        /*!< Remap TIM2 channel 2 on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_TIM16_CH1            ((uint32_t)0x00000700)        /*!< Remap TIM16 channel 1 on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_TIM16_UP             ((uint32_t)0x00000700)        /*!< Remap TIM16 up on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_USART1_RX            ((uint32_t)0x00000800)        /*!< Remap USART1 Rx on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_USART2_RX            ((uint32_t)0x00000900)        /*!< Remap USART2 Rx on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_USART3_RX            ((uint32_t)0x00000A00)        /*!< Remap USART3 Rx on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_USART4_RX            ((uint32_t)0x00000B00)        /*!< Remap USART4 Rx on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_USART5_RX            ((uint32_t)0x00000C00)        /*!< Remap USART5 Rx on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_USART6_RX            ((uint32_t)0x00000D00)        /*!< Remap USART6 Rx on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_USART7_RX            ((uint32_t)0x00000E00)        /*!< Remap USART7 Rx on DMA1 channel 3 */
+#define DMA1_CSELR_CH3_USART8_RX            ((uint32_t)0x00000F00)        /*!< Remap USART8 Rx on DMA1 channel 3 */
+#define DMA1_CSELR_CH4_TIM7_UP              ((uint32_t)0x00001000)        /*!< Remap TIM7 up on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_DAC_CH2              ((uint32_t)0x00001000)        /*!< Remap DAC Channel 2 on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_I2C2_TX              ((uint32_t)0x00002000)        /*!< Remap I2C2 Tx on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_SPI2_RX              ((uint32_t)0x00003000)        /*!< Remap SPI2 Rx on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_TIM2_CH4             ((uint32_t)0x00005000)        /*!< Remap TIM2 channel 4 on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_TIM3_CH1             ((uint32_t)0x00006000)        /*!< Remap TIM3 channel 1 on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_TIM3_TRIG            ((uint32_t)0x00006000)        /*!< Remap TIM3 Trig on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_TIM16_CH1            ((uint32_t)0x00007000)        /*!< Remap TIM16 channel 1 on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_TIM16_UP             ((uint32_t)0x00007000)        /*!< Remap TIM16 up on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_USART1_TX            ((uint32_t)0x00008000)        /*!< Remap USART1 Tx on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_USART2_TX            ((uint32_t)0x00009000)        /*!< Remap USART2 Tx on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_USART3_TX            ((uint32_t)0x0000A000)        /*!< Remap USART3 Tx on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_USART4_TX            ((uint32_t)0x0000B000)        /*!< Remap USART4 Tx on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_USART5_TX            ((uint32_t)0x0000C000)        /*!< Remap USART5 Tx on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_USART6_TX            ((uint32_t)0x0000D000)        /*!< Remap USART6 Tx on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_USART7_TX            ((uint32_t)0x0000E000)        /*!< Remap USART7 Tx on DMA1 channel 4 */
+#define DMA1_CSELR_CH4_USART8_TX            ((uint32_t)0x0000F000)        /*!< Remap USART8 Tx on DMA1 channel 4 */
+#define DMA1_CSELR_CH5_I2C2_RX              ((uint32_t)0x00020000)        /*!< Remap I2C2 Rx on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_SPI2_TX              ((uint32_t)0x00030000)        /*!< Remap SPI1 Tx on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_TIM1_CH3             ((uint32_t)0x00040000)        /*!< Remap TIM1 channel 3 on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_USART1_RX            ((uint32_t)0x00080000)        /*!< Remap USART1 Rx on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_USART2_RX            ((uint32_t)0x00090000)        /*!< Remap USART2 Rx on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_USART3_RX            ((uint32_t)0x000A0000)        /*!< Remap USART3 Rx on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_USART4_RX            ((uint32_t)0x000B0000)        /*!< Remap USART4 Rx on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_USART5_RX            ((uint32_t)0x000C0000)        /*!< Remap USART5 Rx on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_USART6_RX            ((uint32_t)0x000D0000)        /*!< Remap USART6 Rx on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_USART7_RX            ((uint32_t)0x000E0000)        /*!< Remap USART7 Rx on DMA1 channel 5 */
+#define DMA1_CSELR_CH5_USART8_RX            ((uint32_t)0x000F0000)        /*!< Remap USART8 Rx on DMA1 channel 5 */
+#define DMA1_CSELR_CH6_I2C1_TX              ((uint32_t)0x00200000)        /*!< Remap I2C1 Tx on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_SPI2_RX              ((uint32_t)0x00300000)        /*!< Remap SPI2 Rx on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_TIM1_CH1             ((uint32_t)0x00400000)        /*!< Remap TIM1 channel 1 on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_TIM1_CH2             ((uint32_t)0x00400000)        /*!< Remap TIM1 channel 2 on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_TIM1_CH3             ((uint32_t)0x00400000)        /*!< Remap TIM1 channel 3 on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_TIM3_CH1             ((uint32_t)0x00600000)        /*!< Remap TIM3 channel 1 on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_TIM3_TRIG            ((uint32_t)0x00600000)        /*!< Remap TIM3 Trig on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_TIM16_CH1            ((uint32_t)0x00700000)        /*!< Remap TIM16 channel 1 on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_TIM16_UP             ((uint32_t)0x00700000)        /*!< Remap TIM16 up on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_USART1_RX            ((uint32_t)0x00800000)        /*!< Remap USART1 Rx on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_USART2_RX            ((uint32_t)0x00900000)        /*!< Remap USART2 Rx on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_USART3_RX            ((uint32_t)0x00A00000)        /*!< Remap USART3 Rx on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_USART4_RX            ((uint32_t)0x00B00000)        /*!< Remap USART4 Rx on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_USART5_RX            ((uint32_t)0x00C00000)        /*!< Remap USART5 Rx on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_USART6_RX            ((uint32_t)0x00D00000)        /*!< Remap USART6 Rx on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_USART7_RX            ((uint32_t)0x00E00000)        /*!< Remap USART7 Rx on DMA1 channel 6 */
+#define DMA1_CSELR_CH6_USART8_RX            ((uint32_t)0x00F00000)        /*!< Remap USART8 Rx on DMA1 channel 6 */
+#define DMA1_CSELR_CH7_I2C1_RX              ((uint32_t)0x02000000)        /*!< Remap I2C1 Rx on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_SPI2_TX              ((uint32_t)0x03000000)        /*!< Remap SPI2 Tx on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_TIM2_CH2             ((uint32_t)0x05000000)        /*!< Remap TIM2 channel 2 on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_TIM2_CH4             ((uint32_t)0x05000000)        /*!< Remap TIM2 channel 4 on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_TIM17_CH1            ((uint32_t)0x07000000)        /*!< Remap TIM17 channel 1 on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_TIM17_UP             ((uint32_t)0x07000000)        /*!< Remap TIM17 up on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_USART1_TX            ((uint32_t)0x08000000)        /*!< Remap USART1 Tx on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_USART2_TX            ((uint32_t)0x09000000)        /*!< Remap USART2 Tx on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_USART3_TX            ((uint32_t)0x0A000000)        /*!< Remap USART3 Tx on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_USART4_TX            ((uint32_t)0x0B000000)        /*!< Remap USART4 Tx on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_USART5_TX            ((uint32_t)0x0C000000)        /*!< Remap USART5 Tx on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_USART6_TX            ((uint32_t)0x0D000000)        /*!< Remap USART6 Tx on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_USART7_TX            ((uint32_t)0x0E000000)        /*!< Remap USART7 Tx on DMA1 channel 7 */
+#define DMA1_CSELR_CH7_USART8_TX            ((uint32_t)0x0F000000)        /*!< Remap USART8 Tx on DMA1 channel 7 */
 
-/******************  Bit definition for DMA_RMPCR2 register  ********************/
-#define DMA_RMPCR2_DEFAULT                  ((uint32_t)0x00000000)        /*!< Default remap position for DMA2 */
-#define DMA_RMPCR2_CH1_I2C2_TX              ((uint32_t)0x00000002)        /*!< Remap I2C2 TX on DMA2 channel 1 */
-#define DMA_RMPCR2_CH1_USART1_TX            ((uint32_t)0x00000008)        /*!< Remap USART1 Tx on DMA2 channel 1 */
-#define DMA_RMPCR2_CH1_USART2_TX            ((uint32_t)0x00000009)        /*!< Remap USART2 Tx on DMA2 channel 1 */
-#define DMA_RMPCR2_CH1_USART3_TX            ((uint32_t)0x0000000A)        /*!< Remap USART3 Tx on DMA2 channel 1 */
-#define DMA_RMPCR2_CH1_USART4_TX            ((uint32_t)0x0000000B)        /*!< Remap USART4 Tx on DMA2 channel 1 */
-#define DMA_RMPCR2_CH1_USART5_TX            ((uint32_t)0x0000000C)        /*!< Remap USART5 Tx on DMA2 channel 1 */
-#define DMA_RMPCR2_CH1_USART6_TX            ((uint32_t)0x0000000D)        /*!< Remap USART6 Tx on DMA2 channel 1 */
-#define DMA_RMPCR2_CH1_USART7_TX            ((uint32_t)0x0000000E)        /*!< Remap USART7 Tx on DMA2 channel 1 */
-#define DMA_RMPCR2_CH1_USART8_TX            ((uint32_t)0x0000000F)        /*!< Remap USART8 Tx on DMA2 channel 1 */
-#define DMA_RMPCR2_CH2_I2C2_RX              ((uint32_t)0x00000020)        /*!< Remap I2C2 Rx on DMA2 channel 2 */
-#define DMA_RMPCR2_CH2_USART1_RX            ((uint32_t)0x00000080)        /*!< Remap USART1 Rx on DMA2 channel 2 */
-#define DMA_RMPCR2_CH2_USART2_RX            ((uint32_t)0x00000090)        /*!< Remap USART2 Rx on DMA2 channel 2 */
-#define DMA_RMPCR2_CH2_USART3_RX            ((uint32_t)0x000000A0)        /*!< Remap USART3 Rx on DMA2 channel 2 */
-#define DMA_RMPCR2_CH2_USART4_RX            ((uint32_t)0x000000B0)        /*!< Remap USART4 Rx on DMA2 channel 2 */
-#define DMA_RMPCR2_CH2_USART5_RX            ((uint32_t)0x000000C0)        /*!< Remap USART5 Rx on DMA2 channel 2 */
-#define DMA_RMPCR2_CH2_USART6_RX            ((uint32_t)0x000000D0)        /*!< Remap USART6 Rx on DMA2 channel 2 */
-#define DMA_RMPCR2_CH2_USART7_RX            ((uint32_t)0x000000E0)        /*!< Remap USART7 Rx on DMA2 channel 2 */
-#define DMA_RMPCR2_CH2_USART8_RX            ((uint32_t)0x000000F0)        /*!< Remap USART8 Rx on DMA2 channel 2 */
-#define DMA_RMPCR2_CH3_TIM6_UP              ((uint32_t)0x00000100)        /*!< Remap TIM6 up on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_DAC_CH1              ((uint32_t)0x00000100)        /*!< Remap DAC channel 1 on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_SPI1_RX              ((uint32_t)0x00000300)        /*!< Remap SPI1 Rx on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_USART1_RX            ((uint32_t)0x00000800)        /*!< Remap USART1 Rx on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_USART2_RX            ((uint32_t)0x00000900)        /*!< Remap USART2 Rx on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_USART3_RX            ((uint32_t)0x00000A00)        /*!< Remap USART3 Rx on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_USART4_RX            ((uint32_t)0x00000B00)        /*!< Remap USART4 Rx on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_USART5_RX            ((uint32_t)0x00000C00)        /*!< Remap USART5 Rx on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_USART6_RX            ((uint32_t)0x00000D00)        /*!< Remap USART6 Rx on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_USART7_RX            ((uint32_t)0x00000E00)        /*!< Remap USART7 Rx on DMA2 channel 3 */
-#define DMA_RMPCR2_CH3_USART8_RX            ((uint32_t)0x00000F00)        /*!< Remap USART8 Rx on DMA2 channel 3 */
-#define DMA_RMPCR2_CH4_TIM7_UP              ((uint32_t)0x00001000)        /*!< Remap TIM7 up on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_DAC_CH2              ((uint32_t)0x00001000)        /*!< Remap DAC channel 2 on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_SPI1_TX              ((uint32_t)0x00003000)        /*!< Remap SPI1 Tx on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_USART1_TX            ((uint32_t)0x00008000)        /*!< Remap USART1 Tx on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_USART2_TX            ((uint32_t)0x00009000)        /*!< Remap USART2 Tx on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_USART3_TX            ((uint32_t)0x0000A000)        /*!< Remap USART3 Tx on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_USART4_TX            ((uint32_t)0x0000B000)        /*!< Remap USART4 Tx on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_USART5_TX            ((uint32_t)0x0000C000)        /*!< Remap USART5 Tx on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_USART6_TX            ((uint32_t)0x0000D000)        /*!< Remap USART6 Tx on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_USART7_TX            ((uint32_t)0x0000E000)        /*!< Remap USART7 Tx on DMA2 channel 4 */
-#define DMA_RMPCR2_CH4_USART8_TX            ((uint32_t)0x0000F000)        /*!< Remap USART8 Tx on DMA2 channel 4 */
-#define DMA_RMPCR2_CH5_ADC                  ((uint32_t)0x00010000)        /*!< Remap ADC on DMA2 channel 5 */
-#define DMA_RMPCR2_CH5_USART1_TX            ((uint32_t)0x00080000)        /*!< Remap USART1 Tx on DMA2 channel 5 */
-#define DMA_RMPCR2_CH5_USART2_TX            ((uint32_t)0x00090000)        /*!< Remap USART2 Tx on DMA2 channel 5 */
-#define DMA_RMPCR2_CH5_USART3_TX            ((uint32_t)0x000A0000)        /*!< Remap USART3 Tx on DMA2 channel 5 */
-#define DMA_RMPCR2_CH5_USART4_TX            ((uint32_t)0x000B0000)        /*!< Remap USART4 Tx on DMA2 channel 5 */
-#define DMA_RMPCR2_CH5_USART5_TX            ((uint32_t)0x000C0000)        /*!< Remap USART5 Tx on DMA2 channel 5 */
-#define DMA_RMPCR2_CH5_USART6_TX            ((uint32_t)0x000D0000)        /*!< Remap USART6 Tx on DMA2 channel 5 */
-#define DMA_RMPCR2_CH5_USART7_TX            ((uint32_t)0x000E0000)        /*!< Remap USART7 Tx on DMA2 channel 5 */
-#define DMA_RMPCR2_CH5_USART8_TX            ((uint32_t)0x000F0000)        /*!< Remap USART8 Tx on DMA2 channel 5 */
+/******************  Bit definition for DMA2_CSELR register  ********************/
+#define DMA2_CSELR_DEFAULT                  ((uint32_t)0x00000000)        /*!< Default remap position for DMA2 */
+#define DMA2_CSELR_CH1_I2C2_TX              ((uint32_t)0x00000002)        /*!< Remap I2C2 TX on DMA2 channel 1 */
+#define DMA2_CSELR_CH1_USART1_TX            ((uint32_t)0x00000008)        /*!< Remap USART1 Tx on DMA2 channel 1 */
+#define DMA2_CSELR_CH1_USART2_TX            ((uint32_t)0x00000009)        /*!< Remap USART2 Tx on DMA2 channel 1 */
+#define DMA2_CSELR_CH1_USART3_TX            ((uint32_t)0x0000000A)        /*!< Remap USART3 Tx on DMA2 channel 1 */
+#define DMA2_CSELR_CH1_USART4_TX            ((uint32_t)0x0000000B)        /*!< Remap USART4 Tx on DMA2 channel 1 */
+#define DMA2_CSELR_CH1_USART5_TX            ((uint32_t)0x0000000C)        /*!< Remap USART5 Tx on DMA2 channel 1 */
+#define DMA2_CSELR_CH1_USART6_TX            ((uint32_t)0x0000000D)        /*!< Remap USART6 Tx on DMA2 channel 1 */
+#define DMA2_CSELR_CH1_USART7_TX            ((uint32_t)0x0000000E)        /*!< Remap USART7 Tx on DMA2 channel 1 */
+#define DMA2_CSELR_CH1_USART8_TX            ((uint32_t)0x0000000F)        /*!< Remap USART8 Tx on DMA2 channel 1 */
+#define DMA2_CSELR_CH2_I2C2_RX              ((uint32_t)0x00000020)        /*!< Remap I2C2 Rx on DMA2 channel 2 */
+#define DMA2_CSELR_CH2_USART1_RX            ((uint32_t)0x00000080)        /*!< Remap USART1 Rx on DMA2 channel 2 */
+#define DMA2_CSELR_CH2_USART2_RX            ((uint32_t)0x00000090)        /*!< Remap USART2 Rx on DMA2 channel 2 */
+#define DMA2_CSELR_CH2_USART3_RX            ((uint32_t)0x000000A0)        /*!< Remap USART3 Rx on DMA2 channel 2 */
+#define DMA2_CSELR_CH2_USART4_RX            ((uint32_t)0x000000B0)        /*!< Remap USART4 Rx on DMA2 channel 2 */
+#define DMA2_CSELR_CH2_USART5_RX            ((uint32_t)0x000000C0)        /*!< Remap USART5 Rx on DMA2 channel 2 */
+#define DMA2_CSELR_CH2_USART6_RX            ((uint32_t)0x000000D0)        /*!< Remap USART6 Rx on DMA2 channel 2 */
+#define DMA2_CSELR_CH2_USART7_RX            ((uint32_t)0x000000E0)        /*!< Remap USART7 Rx on DMA2 channel 2 */
+#define DMA2_CSELR_CH2_USART8_RX            ((uint32_t)0x000000F0)        /*!< Remap USART8 Rx on DMA2 channel 2 */
+#define DMA2_CSELR_CH3_TIM6_UP              ((uint32_t)0x00000100)        /*!< Remap TIM6 up on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_DAC_CH1              ((uint32_t)0x00000100)        /*!< Remap DAC channel 1 on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_SPI1_RX              ((uint32_t)0x00000300)        /*!< Remap SPI1 Rx on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_USART1_RX            ((uint32_t)0x00000800)        /*!< Remap USART1 Rx on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_USART2_RX            ((uint32_t)0x00000900)        /*!< Remap USART2 Rx on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_USART3_RX            ((uint32_t)0x00000A00)        /*!< Remap USART3 Rx on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_USART4_RX            ((uint32_t)0x00000B00)        /*!< Remap USART4 Rx on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_USART5_RX            ((uint32_t)0x00000C00)        /*!< Remap USART5 Rx on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_USART6_RX            ((uint32_t)0x00000D00)        /*!< Remap USART6 Rx on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_USART7_RX            ((uint32_t)0x00000E00)        /*!< Remap USART7 Rx on DMA2 channel 3 */
+#define DMA2_CSELR_CH3_USART8_RX            ((uint32_t)0x00000F00)        /*!< Remap USART8 Rx on DMA2 channel 3 */
+#define DMA2_CSELR_CH4_TIM7_UP              ((uint32_t)0x00001000)        /*!< Remap TIM7 up on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_DAC_CH2              ((uint32_t)0x00001000)        /*!< Remap DAC channel 2 on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_SPI1_TX              ((uint32_t)0x00003000)        /*!< Remap SPI1 Tx on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_USART1_TX            ((uint32_t)0x00008000)        /*!< Remap USART1 Tx on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_USART2_TX            ((uint32_t)0x00009000)        /*!< Remap USART2 Tx on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_USART3_TX            ((uint32_t)0x0000A000)        /*!< Remap USART3 Tx on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_USART4_TX            ((uint32_t)0x0000B000)        /*!< Remap USART4 Tx on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_USART5_TX            ((uint32_t)0x0000C000)        /*!< Remap USART5 Tx on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_USART6_TX            ((uint32_t)0x0000D000)        /*!< Remap USART6 Tx on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_USART7_TX            ((uint32_t)0x0000E000)        /*!< Remap USART7 Tx on DMA2 channel 4 */
+#define DMA2_CSELR_CH4_USART8_TX            ((uint32_t)0x0000F000)        /*!< Remap USART8 Tx on DMA2 channel 4 */
+#define DMA2_CSELR_CH5_ADC                  ((uint32_t)0x00010000)        /*!< Remap ADC on DMA2 channel 5 */
+#define DMA2_CSELR_CH5_USART1_TX            ((uint32_t)0x00080000)        /*!< Remap USART1 Tx on DMA2 channel 5 */
+#define DMA2_CSELR_CH5_USART2_TX            ((uint32_t)0x00090000)        /*!< Remap USART2 Tx on DMA2 channel 5 */
+#define DMA2_CSELR_CH5_USART3_TX            ((uint32_t)0x000A0000)        /*!< Remap USART3 Tx on DMA2 channel 5 */
+#define DMA2_CSELR_CH5_USART4_TX            ((uint32_t)0x000B0000)        /*!< Remap USART4 Tx on DMA2 channel 5 */
+#define DMA2_CSELR_CH5_USART5_TX            ((uint32_t)0x000C0000)        /*!< Remap USART5 Tx on DMA2 channel 5 */
+#define DMA2_CSELR_CH5_USART6_TX            ((uint32_t)0x000D0000)        /*!< Remap USART6 Tx on DMA2 channel 5 */
+#define DMA2_CSELR_CH5_USART7_TX            ((uint32_t)0x000E0000)        /*!< Remap USART7 Tx on DMA2 channel 5 */
+#define DMA2_CSELR_CH5_USART8_TX            ((uint32_t)0x000F0000)        /*!< Remap USART8 Tx on DMA2 channel 5 */
 
 /******************************************************************************/
 /*                                                                            */
@@ -5300,14 +5291,20 @@ typedef struct
                                        ((INSTANCE) == DMA2_Channel5))
 
 /****************************** GPIO Instances ********************************/
-#define IS_GPIO_ALL_INSTANCE(INSTANCE) (((INSTANCE) == GPIOA) || \
-                                        ((INSTANCE) == GPIOB) || \
-                                        ((INSTANCE) == GPIOC) || \
-                                        ((INSTANCE) == GPIOD) || \
-                                        ((INSTANCE) == GPIOE) || \
-                                        ((INSTANCE) == GPIOF))
+#define IS_GPIO_ALL_INSTANCE(INSTANCE)  (((INSTANCE) == GPIOA) || \
+                                         ((INSTANCE) == GPIOB) || \
+                                         ((INSTANCE) == GPIOC) || \
+                                         ((INSTANCE) == GPIOD) || \
+                                         ((INSTANCE) == GPIOE) || \
+                                         ((INSTANCE) == GPIOF))
 
-/****************************** GPIO Lock Instances ****************************/
+#define IS_GPIO_AF_INSTANCE(INSTANCE)   (((INSTANCE) == GPIOA) || \
+                                         ((INSTANCE) == GPIOB) || \
+                                         ((INSTANCE) == GPIOC) || \
+                                         ((INSTANCE) == GPIOD) || \
+                                         ((INSTANCE) == GPIOE) || \
+                                         ((INSTANCE) == GPIOF))
+
 #define IS_GPIO_LOCK_INSTANCE(INSTANCE) (((INSTANCE) == GPIOA) || \
                                          ((INSTANCE) == GPIOB))
 

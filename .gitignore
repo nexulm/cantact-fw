@@ -1,1 +1,5 @@
-build/*
+build/
+*.uvoptx
+*.uvguix.*
+JLinkLog.txt
+JLinkSettings.ini

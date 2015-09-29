@@ -1,6 +1,8 @@
 #ifndef _SLCAN_H
 #define _SLCAN_H
 
+#include "stm32f0xx_hal.h"
+
 int8_t slcan_parse_frame(char *buf, CanRxMsgTypeDef *frame);
 int8_t slcan_parse_str(char *buf, uint8_t len);
 

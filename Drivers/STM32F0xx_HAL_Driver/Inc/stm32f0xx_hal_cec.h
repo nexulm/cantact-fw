@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_cec.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   Header file of CEC HAL module.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -178,8 +178,8 @@ typedef struct
   
   uint16_t                RxXferSize;     /* CEC Rx Transfer size, 0: header received only */
   
-  uint32_t                ErrorCode;      /* For errors handling purposes, copy of ISR register 
-                                            in case error is reported */
+  __IO uint32_t           ErrorCode;      /* For errors handling purposes, copy of ISR register 
+                                             in case error is reported */
   
   HAL_LockTypeDef         Lock;           /* Locking object */
   

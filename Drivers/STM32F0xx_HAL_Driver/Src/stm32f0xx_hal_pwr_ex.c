@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_pwr_ex.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   Extended PWR HAL module driver.
   *          This file provides firmware functions to manage the following
   *          functionalities of the Power Controller (PWR) peripheral:
@@ -13,7 +13,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -217,7 +217,6 @@ __weak void HAL_PWR_PVDCallback(void)
     defined (STM32F091xC) || defined (STM32F098xx)
 /**
   * @brief Enable VDDIO2 monitor: enable Exti 31 and falling edge detection.
-  * @param None
   * @note If Exti 31 is enable correlty and VDDIO2 voltage goes below Vrefint,
           an interrupt is generated Irq line 1.
           NVIS has to be enable by user.

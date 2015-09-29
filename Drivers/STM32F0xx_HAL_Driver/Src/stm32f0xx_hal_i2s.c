@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_i2s.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   I2S HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the Integrated Interchip Sound (I2S) peripheral:
@@ -93,7 +93,7 @@
    *** I2S HAL driver macros list ***
    =============================================
    [..]
-     Below the list of most used macros in USART HAL driver.
+     Below the list of most used macros in I2S HAL driver.
        
       (+) __HAL_I2S_ENABLE: Enable the specified SPI peripheral (in I2S mode) 
       (+) __HAL_I2S_DISABLE: Disable the specified SPI peripheral (in I2S mode)
@@ -108,7 +108,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -138,6 +138,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal.h"
 
+#ifdef HAL_I2S_MODULE_ENABLED
+
+#if defined(STM32F031x6) || defined(STM32F038xx) || \
+    defined(STM32F051x8) || defined(STM32F058xx) || \
+    defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
+    defined(STM32F042x6) || defined(STM32F048xx) || \
+    defined(STM32F091xC) || defined(STM32F098xx)
+
 /** @addtogroup STM32F0xx_HAL_Driver
   * @{
   */
@@ -147,19 +155,14 @@
   * @{
   */
 
-#ifdef HAL_I2S_MODULE_ENABLED
-
-#if defined(STM32F031x6) || defined(STM32F038xx) || \
-    defined(STM32F051x8) || defined(STM32F058xx) || \
-    defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || \
-    defined(STM32F042x6) || defined(STM32F048xx) || \
-    defined(STM32F091xC) || defined(STM32F098xx)
-
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
+/** @defgroup I2S_Private_Functions I2S Private Functions
+  * @{
+  */
 static void               I2S_DMATxCplt(DMA_HandleTypeDef *hdma);
 static void               I2S_DMATxHalfCplt(DMA_HandleTypeDef *hdma); 
 static void               I2S_DMARxCplt(DMA_HandleTypeDef *hdma);
@@ -168,8 +171,11 @@ static void               I2S_DMAError(DMA_HandleTypeDef *hdma);
 static void               I2S_Transmit_IT(I2S_HandleTypeDef *hi2s);
 static void               I2S_Receive_IT(I2S_HandleTypeDef *hi2s);
 static HAL_StatusTypeDef  I2S_WaitFlagStateUntilTimeout(I2S_HandleTypeDef *hi2s, uint32_t Flag, uint32_t State, uint32_t Timeout);
+/**
+  * @}
+  */
 
-/* Private functions ---------------------------------------------------------*/
+/* Exported functions ---------------------------------------------------------*/
 
 /** @defgroup I2S_Exported_Functions I2S Exported Functions
   * @{
@@ -1157,7 +1163,7 @@ HAL_I2S_StateTypeDef HAL_I2S_GetState(I2S_HandleTypeDef *hi2s)
   *         the configuration information for I2S module
   * @retval I2S Error Code
   */
-HAL_I2S_ErrorTypeDef HAL_I2S_GetError(I2S_HandleTypeDef *hi2s)
+uint32_t HAL_I2S_GetError(I2S_HandleTypeDef *hi2s)
 {
   return hi2s->ErrorCode;
 }
@@ -1169,8 +1175,7 @@ HAL_I2S_ErrorTypeDef HAL_I2S_GetError(I2S_HandleTypeDef *hi2s)
   * @}
   */
 
-
-/** @defgroup I2S_Private_Functions I2S Private Functions
+/** @addtogroup I2S_Private_Functions I2S Private Functions
   * @{
   */
 /**
@@ -1365,6 +1370,14 @@ static HAL_StatusTypeDef I2S_WaitFlagStateUntilTimeout(I2S_HandleTypeDef *hi2s, 
   * @}
   */
 
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
+
 #endif /* defined(STM32F031x6) || defined(STM32F038xx) || */
        /* defined(STM32F051x8) || defined(STM32F058xx) || */
        /* defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || */
@@ -1372,12 +1385,5 @@ static HAL_StatusTypeDef I2S_WaitFlagStateUntilTimeout(I2S_HandleTypeDef *hi2s, 
        /* defined(STM32F091xC) || defined(STM32F098xx) */
 
 #endif /* HAL_I2S_MODULE_ENABLED */
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

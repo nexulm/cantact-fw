@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_tim.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   Header file of TIM HAL module.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -290,7 +290,7 @@ typedef struct
   TIM_Base_InitTypeDef     Init;          /*!< TIM Time Base required parameters */
   HAL_TIM_ActiveChannel    Channel;       /*!< Active channel                    */ 
   DMA_HandleTypeDef        *hdma[7];      /*!< DMA Handlers array
-                                             This array is accessed by a @ref DMA_Handle_index */
+                                             This array is accessed by a @ref TIM_DMA_Handle_index */
   HAL_LockTypeDef          Lock;          /*!< Locking object                    */
   __IO HAL_TIM_StateTypeDef   State;         /*!< TIM operation state               */  
 }TIM_HandleTypeDef;
@@ -1117,7 +1117,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup DMA_Handle_index TIM DMA Handle Index
+/** @defgroup TIM_DMA_Handle_index TIM DMA Handle Index
   * @{
   */
 #define TIM_DMA_ID_UPDATE                ((uint16_t) 0x0)       /*!< Index of the DMA handle used for Update DMA requests */

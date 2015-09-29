@@ -1,42 +1,6 @@
-/**
-******************************************************************************
-* File Name          : main.c
-* Date               : 05/12/2014 20:22:28
-* Description        : Main program body
-******************************************************************************
-*
-* COPYRIGHT(c) 2014 STMicroelectronics
-*
-* Redistribution and use in source and binary forms, with or without modification,
-* are permitted provided that the following conditions are met:
-*   1. Redistributions of source code must retain the above copyright notice,
-*      this list of conditions and the following disclaimer.
-*   2. Redistributions in binary form must reproduce the above copyright notice,
-*      this list of conditions and the following disclaimer in the documentation
-*      and/or other materials provided with the distribution.
-*   3. Neither the name of STMicroelectronics nor the names of its contributors
-*      may be used to endorse or promote products derived from this software
-*      without specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************
-*/
-
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal.h"
 #include "usb_device.h"
 
-/* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
 #include "can.h"
 #include "slcan.h"
@@ -44,195 +8,171 @@
 //#define INTERNAL_OSCILLATOR
 #define EXTERNAL_OSCILLATOR
 
-/* USER CODE END Includes */
+CanRxMsgTypeDef rx_msg;
+CanTxMsgTypeDef tx_msg;
 
-/* Private variables ---------------------------------------------------------*/
+uint8_t msg_buf[SLCAN_MTU];
 
-/* USER CODE BEGIN PV */
+void system_clock_config(void);
+static void gpio_config(void);
 
-/* USER CODE END PV */
+//	1 ms SysTick
+#define TICK_MS(ms)		(ms)
 
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void led_init(void);
+typedef struct {
+	uint8_t LED1_delay;
+	uint8_t LED2_delay;
+	uint8_t LED3_delay;
+} systick_context_t;
 
-/* USER CODE BEGIN PFP */
+systick_context_t systick_context;
 
-/* USER CODE END PFP */
+void LED1_on(void)		{	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_14, GPIO_PIN_SET);	}
+void LED1_off(void)		{	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);	}
+void LED1_toggle(void)	{	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);					}
+void LED1_pulse(void)
+{
+	LED1_on();
+	systick_context.LED1_delay = TICK_MS(100);
+}
 
-/* USER CODE BEGIN 0 */
+void LED2_on(void)		{	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_1, GPIO_PIN_SET);	}
+void LED2_off(void)		{	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);	}
+void LED2_toggle(void)	{	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_1);					}
+void LED2_pulse(void)
+{
+	LED2_on();
+	systick_context.LED2_delay = TICK_MS(100);
+}
 
-/* USER CODE END 0 */
+void LED3_on(void)		{	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_0, GPIO_PIN_SET);	}
+void LED3_off(void)		{	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);	}
+void LED3_toggle(void)	{	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);					}
+void LED3_pulse(void)
+{
+	LED3_on();
+	systick_context.LED3_delay = TICK_MS(100);
+}
 
-volatile int i=0;
+void HAL_SYSTICK_Callback(void)
+{
+	systick_context_t * ctx = &systick_context;
+
+	if (ctx->LED3_delay != 0)
+	{
+		ctx->LED3_delay--;
+		if (ctx->LED3_delay == 0)
+			LED3_off();
+	}
+	if (ctx->LED2_delay != 0)
+	{
+		ctx->LED2_delay--;
+		if (ctx->LED2_delay == 0)
+			LED2_off();
+	}
+	if (ctx->LED1_delay != 0)
+	{
+		ctx->LED1_delay--;
+		if (ctx->LED1_delay == 0)
+			LED1_off();
+	}
+}
+
 int main(void)
 {
+	HAL_Init();
 
-    /* USER CODE BEGIN 1 */
+	system_clock_config();
+	gpio_config();
+	can_init();
 
-    /* USER CODE END 1 */
+	usb_device_init();
 
-    /* MCU Configuration----------------------------------------------------------*/
+	can_set_bitrate(CAN_BITRATE_500K);
+	can_enable();
 
-    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-    HAL_Init();
-
-    /* Configure the system clock */
-    SystemClock_Config();
-
-    /* Initialize all configured peripherals */
-    MX_GPIO_Init();
-    can_init();
-    led_init();
-    MX_USB_DEVICE_Init();
-
-    /* USER CODE END 2 */
-
-    /* USER CODE BEGIN 3 */
-
-
-    // turn on green LED
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
-
-    // blink red LED for test
-    uint32_t count;
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);
-    for (count=0; count < 200000; count++) { __asm("nop");}
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);
-
-    // loop forever
-    CanRxMsgTypeDef rx_msg;
-    uint32_t status;
-    uint8_t msg_buf[SLCAN_MTU];
-
-    for (;;) {
-	while (!is_can_msg_pending());
-	status = can_rx(&rx_msg, 3);
-	if (status == HAL_OK) {
-	    status = slcan_parse_frame(&msg_buf, &rx_msg);
-	    CDC_Transmit_FS(msg_buf, status);
+	while (1)
+	{
+		if (is_can_msg_pending(CAN_FIFO0))
+		{
+			if (can_rx(&rx_msg, 3) == HAL_OK)
+			{
+				CDC_Transmit_FS(
+					msg_buf,
+					slcan_parse_frame((char *)&msg_buf, &rx_msg)
+				);
+			}
+		}
 	}
-    }
-
-    /* USER CODE END 3 */
 }
 
-/** System Clock Configuration
- */
-
-void SystemClock_Config(void)
+/**
+  * @brief	System Clock Configuration
+  */
+void system_clock_config(void)
 {
+	RCC_OscInitTypeDef osc_init;
+	RCC_ClkInitTypeDef clk_init;
+	RCC_PeriphCLKInitTypeDef periph_clk_init;
 
-    RCC_OscInitTypeDef RCC_OscInitStruct;
-    RCC_ClkInitTypeDef RCC_ClkInitStruct;
-    RCC_PeriphCLKInitTypeDef PeriphClkInit;
+	osc_init.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+	osc_init.HSEState = RCC_HSE_ON;
+	osc_init.PLL.PLLState = RCC_PLL_ON;
+	osc_init.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+	osc_init.PLL.PLLMUL = RCC_PLL_MUL6;
+	osc_init.PLL.PREDIV = RCC_PREDIV_DIV1;
+	HAL_RCC_OscConfig(&osc_init);
 
-#ifdef INTERNAL_OSCILLATOR
-    // set up the oscillators
-    // use internal HSI48 (48 MHz), no PLL
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48;
-    RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
-    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+	clk_init.ClockType = RCC_CLOCKTYPE_SYSCLK;
+	clk_init.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+	clk_init.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	clk_init.APB1CLKDivider = RCC_HCLK_DIV1;
+	HAL_RCC_ClockConfig(&clk_init, FLASH_LATENCY_1);
 
-    // set sysclk, hclk, and pclk1 source to HSI48 (48 MHz)
-    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK |
-				   RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1);
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI48;
-    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+	periph_clk_init.PeriphClockSelection = RCC_PERIPHCLK_USB;
+	periph_clk_init.UsbClockSelection = RCC_USBCLKSOURCE_PLLCLK;
+	HAL_RCCEx_PeriphCLKConfig(&periph_clk_init);
 
-    // set USB clock source to HSI48 (48 MHz)
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-    PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
-
-
-#elif defined EXTERNAL_OSCILLATOR
-    // set up the oscillators
-    // use external oscillator (16 MHz), enable 3x PLL (48 MHz)
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-    RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL3;
-    RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
-
-    // set sysclk, hclk, and pclk1 source to PLL (48 MHz)
-    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK |
-				   RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1);
-    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-
-    // set USB clock source to PLL (48 MHz)
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-    PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLLCLK;
-
-#else
-	#error "Please define whether to use an internal or external oscillator"
-#endif
-
-    HAL_RCC_OscConfig(&RCC_OscInitStruct);
-    HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0);
-    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
-    __SYSCFG_CLK_ENABLE();
-
+	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
+	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 }
 
-/** Configure pins as
- * Analog
- * Input
- * Output
- * EVENT_OUT
- * EXTI
- */
-void MX_GPIO_Init(void)
+/**
+  * @brief	Configure pins
+  */
+void gpio_config(void)
 {
+	GPIO_InitTypeDef gpio_init;
 
-    /* GPIO Ports Clock Enable */
-    __GPIOF_CLK_ENABLE();
-    __GPIOA_CLK_ENABLE();
-    __GPIOB_CLK_ENABLE();
-}
+	/* GPIO Ports Clock Enable */
+	__GPIOF_CLK_ENABLE();
+	__GPIOB_CLK_ENABLE();
+	__GPIOA_CLK_ENABLE();
 
-/* USER CODE BEGIN 4 */
-static void led_init() {
-    GPIO_InitTypeDef GPIO_InitStruct;
-    GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_MEDIUM;
-    GPIO_InitStruct.Alternate = 0;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	/*Configure GPIO pins : PB0 PB1 PB14 */
+	gpio_init.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_14;
+	gpio_init.Mode = GPIO_MODE_OUTPUT_PP;
+	gpio_init.Pull = GPIO_NOPULL;
+	gpio_init.Speed = GPIO_SPEED_LOW;
+	HAL_GPIO_Init(GPIOB, &gpio_init);
 }
-/* USER CODE END 4 */
 
 #ifdef USE_FULL_ASSERT
 
 /**
- * @brief Reports the name of the source file and the source line number
- * where the assert_param error has occurred.
- * @param file: pointer to the source file name
- * @param line: assert_param error line source number
- * @retval None
- */
+   * @brief Reports the name of the source file and the source line number
+   * where the assert_param error has occurred.
+   * @param file: pointer to the source file name
+   * @param line: assert_param error line source number
+   * @retval None
+   */
 void assert_failed(uint8_t* file, uint32_t line)
 {
-    /* USER CODE BEGIN 6 */
-    /* User can add his own implementation to report the file name and line number,
-       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-    /* USER CODE END 6 */
+  /* USER CODE BEGIN 6 */
+	/* User can add his own implementation to report the file name and line number,
+	   ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
 
 }
 
 #endif
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

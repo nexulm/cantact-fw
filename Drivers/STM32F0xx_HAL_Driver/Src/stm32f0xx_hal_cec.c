@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_cec.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   CEC HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the High Definition Multimedia Interface 
@@ -47,7 +47,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -77,6 +77,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal.h"
 
+#ifdef HAL_CEC_MODULE_ENABLED
+
+#if defined(STM32F042x6) || defined(STM32F048xx) ||\
+    defined(STM32F051x8) || defined(STM32F058xx) ||\
+    defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) ||\
+    defined(STM32F091xC) || defined (STM32F098xx)
+
 /** @addtogroup STM32F0xx_HAL_Driver
   * @{
   */
@@ -85,12 +92,6 @@
   * @brief HAL CEC module driver
   * @{
   */
-#ifdef HAL_CEC_MODULE_ENABLED
-
-#if defined(STM32F042x6) || defined(STM32F048xx) ||\
-    defined(STM32F051x8) || defined(STM32F058xx) ||\
-    defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) ||\
-    defined(STM32F091xC) || defined (STM32F098xx)
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -370,7 +371,7 @@ HAL_StatusTypeDef HAL_CEC_Transmit(CEC_HandleTypeDef *hcec, uint8_t DestinationA
         {
           if((Timeout == 0) || ((HAL_GetTick() - tickstart) > Timeout))
           {
-            hcec->State = HAL_CEC_STATE_TIMEOUT;                
+            hcec->State = HAL_CEC_STATE_READY;                
             /* Process Unlocked */
             __HAL_UNLOCK(hcec);       
             return HAL_TIMEOUT;
@@ -500,7 +501,7 @@ HAL_StatusTypeDef HAL_CEC_Receive(CEC_HandleTypeDef *hcec, uint8_t *pData, uint3
         {
           if((Timeout == 0) || ((HAL_GetTick() - tickstart) > Timeout))
           {
-            hcec->State = HAL_CEC_STATE_TIMEOUT;
+            hcec->State = HAL_CEC_STATE_READY;
             __HAL_UNLOCK(hcec);    
             return HAL_TIMEOUT;
           }
@@ -990,8 +991,16 @@ static HAL_StatusTypeDef CEC_Transmit_IT(CEC_HandleTypeDef *hcec)
       __HAL_CEC_ENABLE(hcec);
     
       __HAL_CEC_CLEAR_FLAG(hcec,CEC_ISR_TXBR|CEC_ISR_TXEND);
-          
-      hcec->State = HAL_CEC_STATE_READY;
+     
+      /* If RX interruptions are enabled, return to HAL_CEC_STATE_STANDBY_RX state */
+      if (__HAL_CEC_GET_IT_SOURCE(hcec, (CEC_IER_RXBRIE|CEC_IER_RXENDIE) ) != RESET)
+      {
+        hcec->State = HAL_CEC_STATE_STANDBY_RX;
+      }
+      else
+      {    
+        hcec->State = HAL_CEC_STATE_READY;
+      }
       
       HAL_CEC_TxCpltCallback(hcec);
       
@@ -1093,17 +1102,18 @@ static HAL_StatusTypeDef CEC_Receive_IT(CEC_HandleTypeDef *hcec)
   * @}
   */
   
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
+
 #endif /* defined(STM32F042x6) || defined(STM32F048xx) || defined(STM32F051x8) || defined(STM32F058xx) || */
        /* defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || */
        /* defined(STM32F091xC) || defined (STM32F098xx) */
 
 #endif /* HAL_CEC_MODULE_ENABLED */
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

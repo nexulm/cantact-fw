@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_uart.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   UART HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the Universal Asynchronous Receiver Transmitter (UART) peripheral:
@@ -128,7 +128,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -1477,7 +1477,7 @@ HAL_StatusTypeDef UART_WaitOnFlagUntilTimeout(UART_HandleTypeDef *huart, uint32_
           __HAL_UART_DISABLE_IT(huart, UART_IT_PE);
           __HAL_UART_DISABLE_IT(huart, UART_IT_ERR);
 
-          huart->State = HAL_UART_STATE_TIMEOUT;
+          huart->State = HAL_UART_STATE_READY;
 
           /* Process Unlocked */
           __HAL_UNLOCK(huart);
@@ -1502,7 +1502,7 @@ HAL_StatusTypeDef UART_WaitOnFlagUntilTimeout(UART_HandleTypeDef *huart, uint32_
           __HAL_UART_DISABLE_IT(huart, UART_IT_PE);
           __HAL_UART_DISABLE_IT(huart, UART_IT_ERR);
 
-          huart->State = HAL_UART_STATE_TIMEOUT;
+          huart->State = HAL_UART_STATE_READY;
 
           /* Process Unlocked */
           __HAL_UNLOCK(huart);

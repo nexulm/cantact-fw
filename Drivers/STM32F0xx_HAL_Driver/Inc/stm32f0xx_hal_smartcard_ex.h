@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_smartcard_ex.h
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   Header file of SMARTCARD HAL module.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@
  extern "C" {
 #endif
 
-#if !defined(STM32F030x6) && !defined(STM32F030x8) 
+#if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC) 
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal_def.h"
@@ -318,7 +318,7 @@ HAL_StatusTypeDef HAL_SMARTCARDEx_DisableReceiverTimeOut(SMARTCARD_HandleTypeDef
   * @}
   */
 
-#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) */  
+#endif /* !defined(STM32F030x6) && !defined(STM32F030x8)&& !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC)  */  
   
 #ifdef __cplusplus
 }

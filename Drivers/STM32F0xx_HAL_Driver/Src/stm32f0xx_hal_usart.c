@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_usart.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   USART HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the Universal Synchronous Asynchronous Receiver Transmitter (USART) peripheral:
@@ -110,7 +110,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -1466,7 +1466,7 @@ static HAL_StatusTypeDef USART_WaitOnFlagUntilTimeout(USART_HandleTypeDef *husar
           __HAL_USART_DISABLE_IT(husart, USART_IT_PE);
           __HAL_USART_DISABLE_IT(husart, USART_IT_ERR);
           
-          husart->State= HAL_USART_STATE_TIMEOUT;
+          husart->State= HAL_USART_STATE_READY;
           
           /* Process Unlocked */
           __HAL_UNLOCK(husart);
@@ -1491,7 +1491,7 @@ static HAL_StatusTypeDef USART_WaitOnFlagUntilTimeout(USART_HandleTypeDef *husar
           __HAL_USART_DISABLE_IT(husart, USART_IT_PE);
           __HAL_USART_DISABLE_IT(husart, USART_IT_ERR);
   
-          husart->State= HAL_USART_STATE_TIMEOUT;
+          husart->State= HAL_USART_STATE_READY;
           
           /* Process Unlocked */
           __HAL_UNLOCK(husart);

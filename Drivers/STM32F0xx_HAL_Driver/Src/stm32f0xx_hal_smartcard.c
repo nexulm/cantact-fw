@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f0xx_hal_smartcard.c
   * @author  MCD Application Team
-  * @version V1.1.0
-  * @date    03-Oct-2014
+  * @version V1.2.1
+  * @date    09-January-2015
   * @brief   SMARTCARD HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the SMARTCARD peripheral:
@@ -104,7 +104,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -134,6 +134,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal.h"
 
+#ifdef HAL_SMARTCARD_MODULE_ENABLED
+
+#if !defined(STM32F030x6) && !defined(STM32F030x8) && !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC) 
+
 /** @addtogroup STM32F0xx_HAL_Driver
   * @{
   */
@@ -142,16 +146,13 @@
   * @brief HAL SMARTCARD module driver
   * @{
   */
-#ifdef HAL_SMARTCARD_MODULE_ENABLED
 
-#if !defined(STM32F030x6) && !defined(STM32F030x8) 
-    
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup SMARTCARD_Private_Constants   SMARTCARD Private Constants
   * @{
   */
-#define TEACK_REACK_TIMEOUT       1000
+#define TEACK_REACK_TIMEOUT               1000
 #define SMARTCARD_TXDMA_TIMEOUTVALUE      22000
 #define SMARTCARD_TIMEOUT_VALUE           22000
 #define USART_CR1_FIELDS      ((uint32_t)(USART_CR1_M | USART_CR1_PCE | USART_CR1_PS | \
@@ -995,7 +996,7 @@ static HAL_StatusTypeDef SMARTCARD_WaitOnFlagUntilTimeout(SMARTCARD_HandleTypeDe
           __HAL_SMARTCARD_DISABLE_IT(hsmartcard, SMARTCARD_IT_PE);
           __HAL_SMARTCARD_DISABLE_IT(hsmartcard, SMARTCARD_IT_ERR);
           
-          hsmartcard->State= HAL_SMARTCARD_STATE_TIMEOUT;
+          hsmartcard->State= HAL_SMARTCARD_STATE_READY;
           
           /* Process Unlocked */
           __HAL_UNLOCK(hsmartcard);
@@ -1020,7 +1021,7 @@ static HAL_StatusTypeDef SMARTCARD_WaitOnFlagUntilTimeout(SMARTCARD_HandleTypeDe
           __HAL_SMARTCARD_DISABLE_IT(hsmartcard, SMARTCARD_IT_PE);
           __HAL_SMARTCARD_DISABLE_IT(hsmartcard, SMARTCARD_IT_ERR);
   
-          hsmartcard->State= HAL_SMARTCARD_STATE_TIMEOUT;
+          hsmartcard->State= HAL_SMARTCARD_STATE_READY;
           
           /* Process Unlocked */
           __HAL_UNLOCK(hsmartcard);
@@ -1414,16 +1415,17 @@ static void SMARTCARD_AdvFeatureConfig(SMARTCARD_HandleTypeDef *hsmartcard)
 /**
   * @}
   */
-  
-#endif /* !defined(STM32F030x6) && !defined(STM32F030x8) */    
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
+
+#endif /* !defined(STM32F030x6) && !defined(STM32F030x8)&& !defined(STM32F070x6) && !defined(STM32F070xB) && !defined(STM32F030xC) */    
 
 #endif /* HAL_SMARTCARD_MODULE_ENABLED */
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
