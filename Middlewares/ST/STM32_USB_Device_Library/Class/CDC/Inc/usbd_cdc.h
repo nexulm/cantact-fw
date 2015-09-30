@@ -55,7 +55,7 @@
 
 /* CDC Endpoints parameters: you can fine tune these values depending on the needed baudrates and performance. */
 
-#define CDC_DATA_FS_MAX_PACKET_SIZE		64	/* Endpoint IN & OUT Packet size */
+#define CDC_DATA_FS_MAX_PACKET_SIZE		64	/* Endpoint IN & OUT Packet size (must be 4 bytes round) */
 #define CDC_CMD_PACKET_SIZE				8  /* Control Endpoint Packet size */ 
 
 #define USB_CDC_CONFIG_DESC_SIZ			67
@@ -96,28 +96,28 @@ typedef struct
 	uint8_t  datatype;
 } USBD_CDC_LineCodingTypeDef;
 
-typedef struct _USBD_CDC_Itf
+typedef struct
 {
 	int8_t (* Init)		(void);
 	int8_t (* DeInit)	(void);
-	int8_t (* Control)	(uint8_t, uint8_t * , uint16_t);   
-	int8_t (* Receive)	(uint8_t *, uint32_t *);  
+	int8_t (* Control)	(uint8_t, uint8_t *, uint16_t);   
+	int8_t (* Receive)	(uint8_t *, uint16_t *);  
 
 } USBD_CDC_ItfTypeDef;
 
 
 typedef struct
 {
-	uint32_t data[CDC_DATA_FS_MAX_PACKET_SIZE / 4];	/* Force 32bits alignment */
-	uint8_t  CmdOpCode;
-	uint8_t  CmdLength;
-	uint8_t  *RxBuffer;
-	uint8_t  *TxBuffer;
-	uint32_t RxLength;
-	uint32_t TxLength;
+	uint16_t	RxLength;
+	uint16_t	TxLength;
+	uint8_t		CmdOpCode;
+	uint8_t		CmdLength;
+__IO uint8_t	TxState;
 
-	__IO uint32_t TxState;
-	__IO uint32_t RxState;
+	uint8_t *	RxBuffer;
+	uint8_t *	TxBuffer;
+
+	uint8_t		Data[CDC_DATA_FS_MAX_PACKET_SIZE];	/* Must be 32 bits alignment */
 
 } USBD_CDC_HandleTypeDef; 
 

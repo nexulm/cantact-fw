@@ -129,28 +129,28 @@ Reset_Handler	PROC
 				IMPORT	__main
 				IMPORT	SystemInit
 
-				LDR		R0, =__initial_sp			; set stack pointer 
-				MSR		MSP, R0	
+				LDR		R0, =__initial_sp			; set stack pointer
+				MSR		MSP, R0
 
-;;Check if boot space corresponds to test memory 
+;;Check if boot space corresponds to test memory
 
-				LDR		R0,=0x00000004
+				LDR		R0, =0x00000004
 				LDR		R1, [R0]
 				LSRS	R1, R1, #24
-				LDR		R2,=0x1F
+				LDR		R2, =0x1F
 				CMP		R1, R2
-				BNE		ApplicationStart	
-	 
+				BNE		ApplicationStart
+
 ;; SYSCFG clock enable
 
-				LDR		R0,=0x40021018
-				LDR		R1,=0x00000001
+				LDR		R0, =0x40021018
+				LDR		R1, =1
 				STR		R1, [R0]
 
 ;; Set CFGR1 register with flash memory remap at address 0
 
-				LDR		R0,=0x40010000 
-				LDR		R1,=0x00000000
+				LDR		R0, =0x40010000
+				LDR		R1, =0
 				STR		R1, [R0]
 ApplicationStart
 				LDR		R0, =SystemInit

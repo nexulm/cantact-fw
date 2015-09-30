@@ -66,29 +66,42 @@ int8_t slcan_parse_frame(char *buf, CanRxMsgTypeDef *frame)
 	return i;
 }
 
-int8_t slcan_parse_str(char *buf, uint8_t len)
+/**
+ * @retval	0 normal
+ *			-1 bad parameters
+ *			-55	reboot
+ */
+int8_t slcan_parse_str(char *buf)
 {
 	CanTxMsgTypeDef frame;
-	uint8_t i;
+	uint8_t i = 1;
+	char ch;
 
+	if (buf == NULL || *buf == '\0')
+		return (-1);
+
+	LED1_pulse();
 	// convert from ASCII (2nd character to end)
-	for (i = 1; i < len; i++)
+	while ((ch = buf[i]) != '\0')
 	{
-		if (buf[i] < 'A')	buf[i] -= '0';
-		else				buf[i] -= ('A' - 0xA);
+		if (ch < 'A')	ch -= '0';
+		else			ch -= ('A' - 0xA);
+		buf[i] = ch;
+		i++;
 	}
+	ch = buf[0];
 
-	if (buf[0] == 'O')
+	if (ch == 'O')
 	{	// open channel command
 		can_enable();
 		return 0;
 	}
-	else if (buf[0] == 'C')
+	else if (ch == 'C')
 	{	// close channel command
 		can_disable();
 		return 0;
 	}
-	else if (buf[0] == 'S')
+	else if (ch == 'S')
 	{	// set bitrate command
 		switch(buf[1])
 		{
@@ -121,42 +134,45 @@ int8_t slcan_parse_str(char *buf, uint8_t len)
 			break;
 		default:
 			// invalid setting
-			return -1;
+			return (-1);
 		}
 		return 0;
 	}
-	else if (buf[0] == 'm' || buf[0] == 'M')
-	{	// set mode command
-		if (buf[1] == 1)	// mode 1: silent
+	else if (ch == 'm' || ch == 'M')
+	{
+		if (buf[1] == 1)	// mode 1: silent mode
 			can_set_silent(1);
 		else				// default to normal mode
 			can_set_silent(0);
 		return 0;
 	}
-	else if (buf[0] == 't' || buf[0] == 'T')
+	else if (ch == 't' || ch == 'T')
 		// transmit data frame command
 		frame.RTR = CAN_RTR_DATA;
-	else if (buf[0] == 'r' || buf[0] == 'R')
+	else if (ch == 'r' || ch == 'R')
 		// transmit remote frame command
 		frame.RTR = CAN_RTR_REMOTE;
+#ifdef STM32F042x6
+	else if (ch == 'B' && buf[1] == 0x0D && buf[2] == 0x0E && buf[3] == 0x0A && buf[4] == 0x0D)
+		return (-2);
+#endif
 	else
 		// error, unknown command
 		return -1;
 
-	if (buf[0] == 't' || buf[0] == 'r')
+	if (ch == 't' || ch == 'r')
 		frame.IDE = CAN_ID_STD;
-	else if (buf[0] == 'T' || buf[0] == 'R')
+	else if (ch == 'T' || ch == 'R')
 		frame.IDE = CAN_ID_EXT;
 	else	// error
 		return -1;
 
 	frame.StdId = 0;
 	frame.ExtId = 0;
+	i = 1;
 	if (frame.IDE == CAN_ID_EXT)
 	{
-		uint8_t id_len = SLCAN_EXT_ID_LEN;
-		i = 1;
-		while (i <= id_len)
+		while (i <= SLCAN_EXT_ID_LEN)
 		{
 			frame.ExtId <<= 4;
 			frame.ExtId |= buf[i++];
@@ -164,12 +180,10 @@ int8_t slcan_parse_str(char *buf, uint8_t len)
 	}
 	else
 	{
-		uint8_t id_len = SLCAN_STD_ID_LEN;
-		i = 1;
-		while (i <= id_len)
+		while (i <= SLCAN_STD_ID_LEN)
 		{
-			frame.StdId *= 16;
-			frame.StdId += buf[i++];
+			frame.StdId <<= 4;
+			frame.StdId |= buf[i++];
 		}
 	}
 
@@ -180,7 +194,7 @@ int8_t slcan_parse_str(char *buf, uint8_t len)
 	uint8_t j;
 	for (j = 0; j < frame.DLC; j++)
 	{
-		frame.Data[j] = (buf[i] << 4) + buf[i+1];
+		frame.Data[j] = (buf[i] << 4) | buf[i+1];
 		i += 2;
 	}
 

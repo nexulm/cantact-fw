@@ -13,3 +13,8 @@ void usb_device_init(void)
 	USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS);
 	USBD_Start(&hUsbDeviceFS);
 }
+
+void usb_device_deinit(void)
+{
+	USBD_DeInit(&hUsbDeviceFS);
+}

@@ -230,29 +230,29 @@ const uint8_t APBAHBPrescTable[16] = {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 
   */
 void HAL_RCC_DeInit(void)
 {
-  /* Set HSION bit, HSITRIM[4:0] bits to the reset value*/
-  SET_BIT(RCC->CR, RCC_CR_HSION | RCC_CR_HSITRIM_4); 
+	/* Set HSION bit, HSITRIM[4:0] bits to the reset value*/
+	SET_BIT(RCC->CR, RCC_CR_HSION | RCC_CR_HSITRIM_4); 
 
-  /* Reset SW[1:0], HPRE[3:0], PPRE[2:0] and MCOSEL[2:0] bits */
-  CLEAR_BIT(RCC->CFGR, RCC_CFGR_SW | RCC_CFGR_HPRE | RCC_CFGR_PPRE | RCC_CFGR_MCO);
-  
-  /* Reset HSEON, CSSON, PLLON bits */
-  CLEAR_BIT(RCC->CR, RCC_CR_PLLON | RCC_CR_CSSON | RCC_CR_HSEON);
-  
-  /* Reset HSEBYP bit */
-  CLEAR_BIT(RCC->CR, RCC_CR_HSEBYP);
-  
-  /* Reset CFGR register */
-  CLEAR_REG(RCC->CFGR);
-  
-  /* Reset CFGR2 register */
-  CLEAR_REG(RCC->CFGR2);
-  
-  /* Reset CFGR3 register */
-  CLEAR_REG(RCC->CFGR3);
-  
-  /* Disable all interrupts */
-  CLEAR_REG(RCC->CIR); 
+	/* Reset SW[1:0], HPRE[3:0], PPRE[2:0] and MCOSEL[2:0] bits */
+	CLEAR_BIT(RCC->CFGR, RCC_CFGR_SW | RCC_CFGR_HPRE | RCC_CFGR_PPRE | RCC_CFGR_MCO);
+
+	/* Reset HSEON, CSSON, PLLON bits */
+	CLEAR_BIT(RCC->CR, RCC_CR_PLLON | RCC_CR_CSSON | RCC_CR_HSEON);
+
+	/* Reset HSEBYP bit */
+	CLEAR_BIT(RCC->CR, RCC_CR_HSEBYP);
+
+	/* Reset CFGR register */
+	CLEAR_REG(RCC->CFGR);
+
+	/* Reset CFGR2 register */
+	CLEAR_REG(RCC->CFGR2);
+
+	/* Reset CFGR3 register */
+	CLEAR_REG(RCC->CFGR3);
+
+	/* Disable all interrupts */
+	CLEAR_REG(RCC->CIR);
 }
 
 /**

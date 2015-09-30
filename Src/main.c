@@ -78,32 +78,57 @@ void HAL_SYSTICK_Callback(void)
 	}
 }
 
+#define SYSTEM_BOOT_START	0x1FFFC400
+
+typedef  void (*pFunction)(void);
+pFunction Jump_To_Application;
+
 int main(void)
 {
 	HAL_Init();
 
 	system_clock_config();
 	gpio_config();
+	
 	can_init();
-
 	usb_device_init();
 
+	// CAN default initialization
 	can_set_bitrate(CAN_BITRATE_500K);
 	can_enable();
 
 	while (1)
 	{
-		if (is_can_msg_pending(CAN_FIFO0))
+		if (slcan_parse_str(CDC_Receive_Line()) == -2)
+			break;
+
+		if (is_can_msg_pending(CAN_FIFO0)
+		&&	can_rx(&rx_msg, 2) == HAL_OK)
 		{
-			if (can_rx(&rx_msg, 3) == HAL_OK)
-			{
-				CDC_Transmit_FS(
-					msg_buf,
-					slcan_parse_frame((char *)&msg_buf, &rx_msg)
-				);
-			}
+			CDC_Transmit_FS(
+				msg_buf,
+				slcan_parse_frame((char *)&msg_buf, &rx_msg)
+			);
 		}
 	}
+
+	can_disable();
+	usb_device_deinit();
+	HAL_Delay(500);
+
+	SysTick->CTRL = 0;
+	SysTick->LOAD = 0;
+	SysTick->VAL  = 0;
+
+	HAL_RCC_DeInit();
+	HAL_DeInit();
+
+	__SYSCFG_CLK_ENABLE();
+	__HAL_REMAPMEMORY_SYSTEMFLASH();
+
+	Jump_To_Application = (pFunction)(*(__IO uint32_t*)(SYSTEM_BOOT_START + 4));
+	__set_MSP(*(__IO uint32_t *)(SYSTEM_BOOT_START + 0));
+	Jump_To_Application();
 }
 
 /**

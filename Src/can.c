@@ -12,12 +12,6 @@ CanRxMsgTypeDef Can_Rx_Messages[16];
 CAN_HandleTypeDef hcan;
 CAN_FilterConfTypeDef filter;
 
-typedef struct {
-	CAN_BUS_State_t	bus_state;
-} can_context_t;
-
-can_context_t can_context;
-
 void can_init(void)
 {
     filter.FilterIdHigh = 0;
@@ -47,21 +41,17 @@ void can_init(void)
 	hcan.Init.RFLM = DISABLE;
 	hcan.Init.TXFP = DISABLE;
 	hcan.pTxMsg = NULL;
-
-    can_context.bus_state = OFF_BUS;
 }
 
 HAL_StatusTypeDef can_enable(void)
 {
 	HAL_StatusTypeDef result = HAL_OK;
 
-    if (can_context.bus_state == OFF_BUS)
+	if (hcan.State == HAL_CAN_STATE_RESET)
 	{
 		if (HAL_OK == (result = HAL_CAN_Init(&hcan)))
 		{
-			if (HAL_OK == (HAL_CAN_ConfigFilter(&hcan, &filter)))
-				can_context.bus_state = ON_BUS;
-			else
+			if (HAL_OK != (result = HAL_CAN_ConfigFilter(&hcan, &filter)))
 				HAL_CAN_DeInit(&hcan);
 		}
     }
@@ -78,7 +68,7 @@ HAL_StatusTypeDef can_set_bitrate(enum can_bitrate bitrate)
 	uint32_t prescaler = 48;
 
 	// cannot set bitrate while on bus
-	if (can_context.bus_state == ON_BUS)
+	if (hcan.State != HAL_CAN_STATE_RESET)
 		return HAL_ERROR;
 
 	switch (bitrate)
@@ -120,7 +110,7 @@ HAL_StatusTypeDef can_set_bitrate(enum can_bitrate bitrate)
 void can_set_loopback(void)
 {
 	// cannot set silent mode while on bus
-    if (can_context.bus_state == OFF_BUS)
+    if (hcan.State == HAL_CAN_STATE_RESET)
 	{
 		hcan.Init.Mode = CAN_MODE_LOOPBACK;
 	}
@@ -129,7 +119,7 @@ void can_set_loopback(void)
 void can_set_silent(uint8_t silent)
 {
 	// cannot set silent mode while on bus
-    if (can_context.bus_state == OFF_BUS)
+    if (hcan.State == HAL_CAN_STATE_RESET)
 	{
 		if (silent)
 			hcan.Init.Mode = CAN_MODE_SILENT;
@@ -162,7 +152,7 @@ HAL_StatusTypeDef can_rx(CanRxMsgTypeDef *rx_msg, uint32_t timeout)
 
 bool is_can_msg_pending(uint8_t fifo)
 {
-	if (can_context.bus_state == OFF_BUS)
-		return 0;
+	if (hcan.State == HAL_CAN_STATE_RESET)
+		return false;
 	return (__HAL_CAN_MSG_PENDING(&hcan, fifo) > 0);
 }

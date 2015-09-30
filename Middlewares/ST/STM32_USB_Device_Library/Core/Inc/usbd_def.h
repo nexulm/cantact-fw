@@ -66,7 +66,7 @@ extern "C" {
 #define USB_FEATURE_TEST_MODE		2
 
 
-#define USB_HS_MAX_PACKET_SIZE		512
+//!!! #define USB_HS_MAX_PACKET_SIZE		512
 #define USB_FS_MAX_PACKET_SIZE		64
 #define USB_MAX_EP0_SIZE			64
 
@@ -91,18 +91,18 @@ extern "C" {
 #define USBD_EP_TYPE_BULK			2
 #define USBD_EP_TYPE_INTR			3
 
-typedef	struct	usb_setup_req
+typedef	struct
 {
-	uint8_t	bmRequest;						
-	uint8_t	bRequest;							
-	uint16_t	wValue;							 
-	uint16_t	wIndex;							 
-	uint16_t	wLength;							
+	uint8_t		bmRequest;
+	uint8_t		bRequest;
+	uint16_t	wValue;
+	uint16_t	wIndex;
+	uint16_t	wLength;
 } USBD_SetupReqTypedef;
 
 struct _USBD_HandleTypeDef;
 
-typedef struct _Device_cb
+typedef struct
 {
 	uint8_t	(*Init)			(struct _USBD_HandleTypeDef *pdev, uint8_t cfgidx);
 	uint8_t	(*DeInit)		(struct _USBD_HandleTypeDef *pdev, uint8_t cfgidx);
@@ -117,7 +117,7 @@ typedef struct _Device_cb
 	uint8_t	(*IsoINIncomplete)	(struct _USBD_HandleTypeDef *pdev, uint8_t epnum);
 	uint8_t	(*IsoOUTIncomplete)	(struct _USBD_HandleTypeDef *pdev, uint8_t epnum);
 
-	uint8_t	*(*GetFSConfigDescriptor)	(uint16_t *length);
+	uint8_t	*(*GetFSConfigDescriptor)			(uint16_t *length);
 	uint8_t	*(*GetOtherSpeedConfigDescriptor)	(uint16_t *length);
 	uint8_t	*(*GetDeviceQualifierDescriptor)	(uint16_t *length);
 #if (USBD_SUPPORT_USER_STRING == 1)
@@ -155,30 +155,32 @@ typedef struct
 /* USB Device handle structure */
 typedef struct
 {
-	uint32_t status;
-	uint32_t total_length;	
-	uint32_t rem_length; 
-	uint32_t maxpacket;	
+	uint16_t total_length;
+	uint16_t rem_length;
+	uint16_t maxpacket;
+	uint8_t status;
 } USBD_EndpointTypeDef;
 
 /* USB Device handle structure */
 typedef struct _USBD_HandleTypeDef
 {
 	uint8_t				id;
-	uint32_t			dev_config;
-	uint32_t			dev_default_config;
-	uint32_t			dev_config_status;
+	uint8_t				dev_config;
+	uint8_t				dev_default_config;
+	uint8_t				dev_config_status;
 
-	USBD_EndpointTypeDef	ep_in[15];
-	USBD_EndpointTypeDef	ep_out[15];	
-	uint32_t				ep0_state;	
-	uint32_t				ep0_data_len;	 
+	uint16_t			ep0_data_len;
+
+	uint8_t				ep0_state;	
 	uint8_t				dev_state;
 	uint8_t				dev_old_state;
 	uint8_t				dev_address;
 	uint8_t				dev_connection_status;	
 	uint8_t				dev_test_mode;
-	uint32_t			dev_remote_wakeup;
+	uint8_t				dev_remote_wakeup;
+
+	USBD_EndpointTypeDef	ep_in[15];
+	USBD_EndpointTypeDef	ep_out[15];
 
 	USBD_SetupReqTypedef	request;
 	USBD_DescriptorsTypeDef *pDesc;
@@ -189,10 +191,10 @@ typedef struct _USBD_HandleTypeDef
 } USBD_HandleTypeDef;
 
 
-#define	SWAPBYTE(addr)	(((uint16_t)(*((uint8_t *)(addr)))) + \
+#define	SWAPBYTE(addr)	(((uint16_t)(*( (uint8_t *)(addr))     )) + \
 						(((uint16_t)(*(((uint8_t *)(addr)) + 1))) << 8))
 
-#define LOBYTE(x)	((uint8_t)(x & 0x00FF))
+#define LOBYTE(x)	((uint8_t)( x & 0x00FF)     )
 #define HIBYTE(x)	((uint8_t)((x & 0xFF00) >>8))
 #define MIN(a, b)	(((a) < (b)) ? (a) : (b))
 #define MAX(a, b)	(((a) > (b)) ? (a) : (b))

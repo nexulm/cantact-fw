@@ -1,80 +1,25 @@
-/**
-  ******************************************************************************
-  * @file           : usbd_conf.c
-  * @version        : v1.0_Cube
-  * @brief          : This file implements the board support package for the USB device library
-  ******************************************************************************
-  *
-  * COPYRIGHT(c) 2015 STMicroelectronics
-  *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  * 1. Redistributions of source code must retain the above copyright notice,
-  * this list of conditions and the following disclaimer.
-  * 2. Redistributions in binary form must reproduce the above copyright notice,
-  * this list of conditions and the following disclaimer in the documentation
-  * and/or other materials provided with the distribution.
-  * 3. Neither the name of STMicroelectronics nor the names of its contributors
-  * may be used to endorse or promote products derived from this software
-  * without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-*/
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx.h"
 #include "stm32f0xx_hal.h"
 #include "usbd_def.h"
 #include "usbd_core.h"
 #include "usbd_cdc.h"
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
+
 PCD_HandleTypeDef hpcd_USB_FS;
 
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
-/* USER CODE BEGIN 1 */
 static void SystemClockConfig_Resume(void);
-/* USER CODE END 1 */
 void HAL_PCDEx_SetConnectionState(PCD_HandleTypeDef *hpcd, uint8_t state);
 void system_clock_config(void);
 
-/*******************************************************************************
-                       LL Driver Callbacks (PCD -> USB Device Library)
-*******************************************************************************/
 /* MSP Init */
 void HAL_PCD_MspInit(PCD_HandleTypeDef* hpcd)
 {
 	if (hpcd->Instance == USB)
 	{
-		/* USER CODE BEGIN USB_MspInit 0 */
-
-		/* USER CODE END USB_MspInit 0 */
-		/* Peripheral clock enable */
 		__USB_CLK_ENABLE();
 
 		/* Peripheral interrupt init*/
 		HAL_NVIC_SetPriority(USB_IRQn, 0, 0);
 		HAL_NVIC_EnableIRQ(USB_IRQn);
-		/* USER CODE BEGIN USB_MspInit 1 */
-
-		/* USER CODE END USB_MspInit 1 */
 	}
 }
 
@@ -82,16 +27,10 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* hpcd)
 {
 	if (hpcd->Instance == USB)
 	{
-		/* USER CODE BEGIN USB_MspDeInit 0 */
-		/* USER CODE END USB_MspDeInit 0 */
-		/* Peripheral clock disable */
-		__USB_CLK_DISABLE();
-
 		/* Peripheral interrupt Deinit*/
 		HAL_NVIC_DisableIRQ(USB_IRQn);
 
-		/* USER CODE BEGIN USB_MspDeInit 1 */
-		/* USER CODE END USB_MspDeInit 1 */
+		__USB_CLK_DISABLE();
 	}
 }
 
@@ -249,11 +188,19 @@ USBD_StatusTypeDef  USBD_LL_Init(USBD_HandleTypeDef *pdev)
 	hpcd_USB_FS.Init.low_power_enable = DISABLE;
 	HAL_PCD_Init(&hpcd_USB_FS);
 
+#ifdef PCD_DBL_BUF
 	HAL_PCDEx_PMAConfig(pdev->pData, 0x00, PCD_SNG_BUF, 0x18);
 	HAL_PCDEx_PMAConfig(pdev->pData, 0x80, PCD_SNG_BUF, 0x58);
-	HAL_PCDEx_PMAConfig(pdev->pData, 0x81, PCD_SNG_BUF, 0xC0);  
+	HAL_PCDEx_PMAConfig(pdev->pData, 0x81, PCD_SNG_BUF, 0xC0);
 	HAL_PCDEx_PMAConfig(pdev->pData, 0x01, PCD_SNG_BUF, 0x110);
-	HAL_PCDEx_PMAConfig(pdev->pData, 0x82, PCD_SNG_BUF, 0x100);  
+	HAL_PCDEx_PMAConfig(pdev->pData, 0x82, PCD_SNG_BUF, 0x100);
+#else
+	HAL_PCDEx_PMAConfig(pdev->pData, 0x00, 0x18);
+	HAL_PCDEx_PMAConfig(pdev->pData, 0x80, 0x58);
+	HAL_PCDEx_PMAConfig(pdev->pData, 0x81, 0xC0);
+	HAL_PCDEx_PMAConfig(pdev->pData, 0x01, 0x110);
+	HAL_PCDEx_PMAConfig(pdev->pData, 0x82, 0x100);
+#endif
 	return USBD_OK;
 }
 
@@ -425,7 +372,7 @@ USBD_StatusTypeDef  USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev,
  * @param  ep_addr: Endpoint Number
  * @retval Recived Data Size
  */
-uint32_t USBD_LL_GetRxDataSize  (USBD_HandleTypeDef *pdev, uint8_t  ep_addr)
+uint16_t USBD_LL_GetRxDataSize  (USBD_HandleTypeDef *pdev, uint8_t  ep_addr)
 {
 	return HAL_PCD_EP_GetRxCount(pdev->pData, ep_addr);
 }

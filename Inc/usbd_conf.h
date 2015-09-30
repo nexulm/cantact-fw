@@ -105,7 +105,7 @@
                             printf(__VA_ARGS__);\
                             printf("\n");
 #else
-#define USBD_ErrLog(...)   
+#define USBD_ErrLog(...)
 #endif 
                             
                             

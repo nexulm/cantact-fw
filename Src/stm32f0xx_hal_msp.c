@@ -6,10 +6,16 @@
 void HAL_MspInit(void)
 {
 	__SYSCFG_CLK_ENABLE();
+	__DBGMCU_CLK_ENABLE();
 
 	/* System interrupt init*/
 	/* SysTick_IRQn interrupt configuration */
 	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+void HAL_MspDeInit(void)
+{
+//	__SYSCFG_CLK_DISABLE();
 }
 
 void HAL_CAN_MspInit(CAN_HandleTypeDef* hcan)

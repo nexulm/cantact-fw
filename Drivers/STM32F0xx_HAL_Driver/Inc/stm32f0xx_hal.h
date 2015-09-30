@@ -479,25 +479,29 @@
   * @{   
   */
 #if defined(SYSCFG_CFGR1_MEM_MODE)
-/** @brief  Main Flash memory mapped at 0x00000000
-  */
-#define __HAL_REMAPMEMORY_FLASH()        (SYSCFG->CFGR1 &= ~(SYSCFG_CFGR1_MEM_MODE))
+	/** @brief  Main Flash memory mapped at 0x00000000
+	*/
+	#define __HAL_REMAPMEMORY_FLASH()		(SYSCFG->CFGR1 &= ~(SYSCFG_CFGR1_MEM_MODE))
 #endif /* SYSCFG_CFGR1_MEM_MODE */
 
 #if defined(SYSCFG_CFGR1_MEM_MODE_0)
-/** @brief  System Flash memory mapped at 0x00000000
-  */
-#define __HAL_REMAPMEMORY_SYSTEMFLASH()  do {SYSCFG->CFGR1 &= ~(SYSCFG_CFGR1_MEM_MODE); \
-                                             SYSCFG->CFGR1 |= SYSCFG_CFGR1_MEM_MODE_0;  \
-                                            }while(0)
+	/** @brief  System Flash memory mapped at 0x00000000
+	*/
+	#define __HAL_REMAPMEMORY_SYSTEMFLASH()				\
+		do {											\
+			SYSCFG->CFGR1 &= ~(SYSCFG_CFGR1_MEM_MODE);	\
+			SYSCFG->CFGR1 |= SYSCFG_CFGR1_MEM_MODE_0;	\
+		} while(0)
 #endif /* SYSCFG_CFGR1_MEM_MODE_0 */
 
 #if defined(SYSCFG_CFGR1_MEM_MODE_0) && defined(SYSCFG_CFGR1_MEM_MODE_1)
-/** @brief  Embedded SRAM mapped at 0x00000000
-  */
-#define __HAL_REMAPMEMORY_SRAM()         do {SYSCFG->CFGR1 &= ~(SYSCFG_CFGR1_MEM_MODE); \
-                                             SYSCFG->CFGR1 |= (SYSCFG_CFGR1_MEM_MODE_0 | SYSCFG_CFGR1_MEM_MODE_1); \
-                                            }while(0) 
+	/** @brief  Embedded SRAM mapped at 0x00000000
+	*/
+	#define __HAL_REMAPMEMORY_SRAM()					\
+		do {											\
+			SYSCFG->CFGR1 &= ~(SYSCFG_CFGR1_MEM_MODE);	\
+			SYSCFG->CFGR1 |= (SYSCFG_CFGR1_MEM_MODE_0 | SYSCFG_CFGR1_MEM_MODE_1);	\
+		} while(0)
 #endif /* SYSCFG_CFGR1_MEM_MODE_0 && SYSCFG_CFGR1_MEM_MODE_1 */
 /**
   * @}

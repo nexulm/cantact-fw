@@ -180,8 +180,8 @@ void HAL_NVIC_EnableIRQ(IRQn_Type IRQn)
   */
 void HAL_NVIC_DisableIRQ(IRQn_Type IRQn)
 {
-  /* Disable interrupt */
-  NVIC_DisableIRQ(IRQn);
+	/* Disable interrupt */
+	NVIC_DisableIRQ(IRQn);
 }
 
 /**
@@ -190,8 +190,8 @@ void HAL_NVIC_DisableIRQ(IRQn_Type IRQn)
   */
 void HAL_NVIC_SystemReset(void)
 {
-  /* System Reset */
-  NVIC_SystemReset();
+	/* System Reset */
+	NVIC_SystemReset();
 }
 
 /**
@@ -203,7 +203,7 @@ void HAL_NVIC_SystemReset(void)
   */
 uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb)
 {
-   return SysTick_Config(TicksNumb);
+	return SysTick_Config(TicksNumb);
 }
 /**
   * @}

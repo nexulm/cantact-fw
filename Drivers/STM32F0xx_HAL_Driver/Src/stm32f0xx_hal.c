@@ -173,21 +173,21 @@ HAL_StatusTypeDef HAL_Init(void)
   */
 HAL_StatusTypeDef HAL_DeInit(void)
 {
-  /* Reset of all peripherals */
-  __APB1_FORCE_RESET();
-  __APB1_RELEASE_RESET();
+	/* Reset of all peripherals */
+	__APB1_FORCE_RESET();
+	__APB1_RELEASE_RESET();
 
-  __APB2_FORCE_RESET();
-  __APB2_RELEASE_RESET();
+	__APB2_FORCE_RESET();
+	__APB2_RELEASE_RESET();
 
-  __AHB_FORCE_RESET();
-  __AHB_RELEASE_RESET();
+	__AHB_FORCE_RESET();
+	__AHB_RELEASE_RESET();
 
-  /* De-Init the low level hardware */
-  HAL_MspDeInit();
-    
-  /* Return function status */
-  return HAL_OK;
+	/* De-Init the low level hardware */
+	HAL_MspDeInit();
+
+	/* Return function status */
+	return HAL_OK;
 }
 
 /**
@@ -340,11 +340,11 @@ __weak void HAL_ResumeTick(void)
   */
 __weak void HAL_Delay(__IO uint32_t Delay)
 {
-  uint32_t tickstart = 0;
-  tickstart = HAL_GetTick();
-  while((HAL_GetTick() - tickstart) < Delay)
-  {
-  }
+	uint32_t tickstart = 0;
+	tickstart = HAL_GetTick();
+	while((HAL_GetTick() - tickstart) < Delay)
+	{
+	}
 }
 
 /**
