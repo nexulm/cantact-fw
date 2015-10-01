@@ -14,32 +14,22 @@ namespace CANtact
 		public RollingTrace()
 		{
 			InitializeComponent();
-			grid.AutoGenerateColumns = false;
 		}
 
-		public void Add(CanPackage package)
+		public void Add(CANPackage package)
 		{
 			if (InvokeRequired)
-				BeginInvoke(new Action<CanPackage>(Add), package);
-			else
 			{
-				grid.Rows.Insert(0,
-					"RX",
-					"0x" + package.ID.ToString("X4"), 
-					package.FrameType == CanFrameType.CAN_RTR_DATA ? "DATA" : "REM",
-					package.DLC,
-					"0x" + package.Data[0].ToString("X2"),
-					"0x" + package.Data[1].ToString("X2"),
-					"0x" + package.Data[2].ToString("X2"),
-					"0x" + package.Data[3].ToString("X2"),
-					"0x" + package.Data[4].ToString("X2"),
-					"0x" + package.Data[5].ToString("X2"),
-					"0x" + package.Data[6].ToString("X2"),
-					"0x" + package.Data[7].ToString("X2"),
-					""
-				);
-				grid.Rows[0].Selected = true;
+				BeginInvoke(new Action<CANPackage>(Add), package);
+				return;
 			}
+
+			string[] subitems = package.ToStrings();
+			ListViewItem item = new ListViewItem(subitems, 0);
+			if (grid.Items.Count == 0)
+				grid.Items.Add(item);
+			else
+				grid.Items.Insert(0, item);
 		}
 	}
 }

@@ -10,7 +10,8 @@ namespace CANtact
 	{
 		private SerialPort m_port;
 		private Log m_log;
-		private RollingTrace m_trace;
+		private RollingTrace m_rolling;
+		private FixedTrace m_matrix;
 		private string m_data = string.Empty;
 
 		public CANtactGui()
@@ -65,25 +66,48 @@ namespace CANtact
 		}
 		#endregion
 
-		#region View Trace
-		private void ViewTrace_Click(object sender, EventArgs e)
+		#region View Matrix Trace
+		private void mi_ViewMatrix_Click(object sender, EventArgs e)
 		{
-			if (m_trace == null)
+			if (m_matrix == null)
 			{
-				m_trace = new RollingTrace();
-				m_trace.Location = new Point(100, 0);
-				m_trace.FormClosed += Trace_FormClosed;
-				m_trace.MdiParent = this;
-				m_trace.Show();
+				m_matrix = new FixedTrace();
+				m_matrix.Location = new Point(100, 100);
+				m_matrix.FormClosed += MatrixTrace_Closed;
+				m_matrix.MdiParent = this;
+				m_matrix.Show();
 			}
-			else if (m_trace.WindowState == FormWindowState.Minimized)
+			else if (m_matrix.WindowState == FormWindowState.Minimized)
 			{
-				m_trace.WindowState = FormWindowState.Normal;
+				m_matrix.WindowState = FormWindowState.Normal;
 			}
 		}
-		void Trace_FormClosed(object sender, FormClosedEventArgs e)
+
+		void MatrixTrace_Closed(object sender, FormClosedEventArgs e)
 		{
-			m_trace = null;
+			m_matrix = null;
+		}
+		#endregion
+
+		#region View Rolling Trace
+		private void mi_ViewRolling_Click(object sender, EventArgs e)
+		{
+			if (m_rolling == null)
+			{
+				m_rolling = new RollingTrace();
+				m_rolling.Location = new Point(100, 0);
+				m_rolling.FormClosed += RollingTrace_Closed;
+				m_rolling.MdiParent = this;
+				m_rolling.Show();
+			}
+			else if (m_rolling.WindowState == FormWindowState.Minimized)
+			{
+				m_rolling.WindowState = FormWindowState.Normal;
+			}
+		}
+		void RollingTrace_Closed(object sender, FormClosedEventArgs e)
+		{
+			m_rolling = null;
 		}
 		#endregion
 
@@ -167,7 +191,8 @@ namespace CANtact
 
 			m_port.PortName = ComPorts.SelectedItem.ToString();
 			ViewLog_Click(sender, e);
-			ViewTrace_Click(sender, e);
+			mi_ViewRolling_Click(sender, e);
+			mi_ViewMatrix_Click(sender, e);
 
 			try
 			{
@@ -252,7 +277,7 @@ namespace CANtact
 		{
 			if (package.Length > 1)
 			{
-				CanPackage pack = new CanPackage();
+				CANPackage pack = new CANPackage();
 				int i, j;
 				switch (package[0])
 				{
@@ -297,10 +322,17 @@ namespace CANtact
 						pack.Data[j] |= GetPackData(ref package, i++);
 					}
 				}
-				if (m_trace != null)
-					m_trace.Add(pack);
+				if (m_rolling != null)
+					m_rolling.Add(pack);
+				if (m_matrix != null)
+					m_matrix.Add(pack);
 			}
 		}
 		#endregion
+
+		private void mi_Tools_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
