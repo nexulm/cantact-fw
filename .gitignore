@@ -5,3 +5,10 @@ JLinkLog.txt
 JLinkSettings.ini
 *.tmp
 
+.vs
+obj/
+
+*.vshost.exe.*
+*.exe.config
+bin/
+*.suo

@@ -60,7 +60,6 @@ int8_t slcan_parse_frame(char *buf, CanRxMsgTypeDef *frame)
 
 	// add carrage return (slcan EOL)
 	buf[i++] = '\r';
-	buf[i++] = '\n';
 
 	// return number of bytes in string
 	return i;
