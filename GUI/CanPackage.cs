@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+
 namespace CANtact
 {
 	public enum CanFrameType
@@ -24,6 +25,9 @@ namespace CANtact
 		public UInt32 ID;
 		public UInt16 DLC;
 		public byte[] Data = new byte[8];
+		public UInt32 Delay { get; set; }
+		public UInt32 Count { get; set; }
+		public bool Use { get; set; }
 
 		public CANPackage()
 		{

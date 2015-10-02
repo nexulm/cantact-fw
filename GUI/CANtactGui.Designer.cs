@@ -35,14 +35,14 @@
 			this.mi_ViewLog = new System.Windows.Forms.ToolStripMenuItem();
 			this.mi_ViewRolling = new System.Windows.Forms.ToolStripMenuItem();
 			this.mi_ViewMatrix = new System.Windows.Forms.ToolStripMenuItem();
+			this.mi_Transmit = new System.Windows.Forms.ToolStripButton();
+			this.mi_Tools = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.b_Refresh = new System.Windows.Forms.ToolStripButton();
 			this.ComPorts = new System.Windows.Forms.ToolStripComboBox();
 			this.Connect = new System.Windows.Forms.ToolStripButton();
 			this.stripBottom = new System.Windows.Forms.StatusStrip();
 			this.Status = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
-			this.mi_Tools = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.stripTop.SuspendLayout();
 			this.stripBottom.SuspendLayout();
 			this.SuspendLayout();
@@ -53,6 +53,7 @@
 			this.stripTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mi_Exit,
             this.mi_View,
+            this.mi_Transmit,
             this.mi_Tools,
             this.toolStripSeparator1,
             this.b_Refresh,
@@ -90,23 +91,48 @@
 			// mi_ViewLog
 			// 
 			this.mi_ViewLog.Name = "mi_ViewLog";
-			this.mi_ViewLog.Size = new System.Drawing.Size(181, 26);
+			this.mi_ViewLog.Size = new System.Drawing.Size(170, 26);
 			this.mi_ViewLog.Text = "Log";
 			this.mi_ViewLog.Click += new System.EventHandler(this.ViewLog_Click);
 			// 
 			// mi_ViewRolling
 			// 
 			this.mi_ViewRolling.Name = "mi_ViewRolling";
-			this.mi_ViewRolling.Size = new System.Drawing.Size(181, 26);
+			this.mi_ViewRolling.Size = new System.Drawing.Size(170, 26);
 			this.mi_ViewRolling.Text = "Rolling Trace";
 			this.mi_ViewRolling.Click += new System.EventHandler(this.mi_ViewRolling_Click);
 			// 
 			// mi_ViewMatrix
 			// 
 			this.mi_ViewMatrix.Name = "mi_ViewMatrix";
-			this.mi_ViewMatrix.Size = new System.Drawing.Size(181, 26);
+			this.mi_ViewMatrix.Size = new System.Drawing.Size(170, 26);
 			this.mi_ViewMatrix.Text = "Fixed Trace";
 			this.mi_ViewMatrix.Click += new System.EventHandler(this.mi_ViewMatrix_Click);
+			// 
+			// mi_Transmit
+			// 
+			this.mi_Transmit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.mi_Transmit.Image = ((System.Drawing.Image)(resources.GetObject("mi_Transmit.Image")));
+			this.mi_Transmit.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.mi_Transmit.Name = "mi_Transmit";
+			this.mi_Transmit.Size = new System.Drawing.Size(69, 25);
+			this.mi_Transmit.Text = "Transmit";
+			this.mi_Transmit.Click += new System.EventHandler(this.mi_Transmit_Click);
+			// 
+			// mi_Tools
+			// 
+			this.mi_Tools.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.mi_Tools.Image = ((System.Drawing.Image)(resources.GetObject("mi_Tools.Image")));
+			this.mi_Tools.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.mi_Tools.Name = "mi_Tools";
+			this.mi_Tools.Size = new System.Drawing.Size(48, 25);
+			this.mi_Tools.Text = "Tools";
+			this.mi_Tools.Click += new System.EventHandler(this.mi_Tools_Click);
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 28);
 			// 
 			// b_Refresh
 			// 
@@ -137,11 +163,10 @@
 			// 
 			this.stripBottom.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.stripBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Status,
-            this.toolStripSplitButton1});
-			this.stripBottom.Location = new System.Drawing.Point(0, 567);
+            this.Status});
+			this.stripBottom.Location = new System.Drawing.Point(0, 569);
 			this.stripBottom.Name = "stripBottom";
-			this.stripBottom.Size = new System.Drawing.Size(1132, 26);
+			this.stripBottom.Size = new System.Drawing.Size(1132, 24);
 			this.stripBottom.TabIndex = 4;
 			this.stripBottom.Text = "statusStrip1";
 			// 
@@ -152,35 +177,9 @@
 			this.Status.Spring = true;
 			this.Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// toolStripSplitButton1
-			// 
-			this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripSplitButton1.Enabled = false;
-			this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
-			this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-			this.toolStripSplitButton1.Size = new System.Drawing.Size(39, 24);
-			this.toolStripSplitButton1.Text = "toolStripSplitButton1";
-			// 
-			// mi_Tools
-			// 
-			this.mi_Tools.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.mi_Tools.Image = ((System.Drawing.Image)(resources.GetObject("mi_Tools.Image")));
-			this.mi_Tools.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mi_Tools.Name = "mi_Tools";
-			this.mi_Tools.Size = new System.Drawing.Size(48, 25);
-			this.mi_Tools.Text = "Tools";
-			this.mi_Tools.Click += new System.EventHandler(this.mi_Tools_Click);
-			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 28);
-			// 
 			// CANtactGui
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1132, 593);
 			this.Controls.Add(this.stripBottom);
 			this.Controls.Add(this.stripTop);
@@ -205,7 +204,6 @@
 		private System.Windows.Forms.ToolStripButton Connect;
 		private System.Windows.Forms.StatusStrip stripBottom;
 		private System.Windows.Forms.ToolStripStatusLabel Status;
-		private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
 		private System.Windows.Forms.ToolStripButton mi_Exit;
 		private System.Windows.Forms.ToolStripButton b_Refresh;
 		private System.Windows.Forms.ToolStripDropDownButton mi_View;
@@ -214,6 +212,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mi_ViewMatrix;
 		private System.Windows.Forms.ToolStripButton mi_Tools;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripButton mi_Transmit;
 	}
 }
 

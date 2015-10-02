@@ -10,8 +10,13 @@ namespace CANtact
 	{
 		private SerialPort m_port;
 		private Log m_log;
+		private Point m_log_location = new Point(0, 0);
 		private RollingTrace m_rolling;
+		private Point m_rolling_location = new Point(50, 0);
 		private FixedTrace m_matrix;
+		private Point m_matrix_location = new Point(50, 50);
+		private Transmit m_transmit;
+		private Point m_transmit_location = new Point(50, 100);
 		private string m_data = string.Empty;
 
 		public CANtactGui()
@@ -24,7 +29,7 @@ namespace CANtact
 			Close();
 		}
 
-		#region Load/Save Settings
+		#region Load/Save Settings 
 		private void LoadSettings()
 		{
 		}
@@ -33,7 +38,7 @@ namespace CANtact
 		}
 		#endregion
 
-		#region Form Load
+		#region Form Load 
 		private void CANtactGui_Load(object sender, EventArgs e)
 		{
 			m_port = new SerialPort();
@@ -51,7 +56,7 @@ namespace CANtact
 		}
 		#endregion
 
-		#region Form Closing
+		#region Form Closing 
 		private void CANtactGui_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (m_log != null)
@@ -66,74 +71,93 @@ namespace CANtact
 		}
 		#endregion
 
-		#region View Matrix Trace
+		#region View Transmit 
+		private void mi_Transmit_Click(object sender, EventArgs e)
+		{
+			if (m_transmit == null)
+			{
+				m_transmit = new Transmit();
+				m_transmit.Location = m_transmit_location;
+				m_transmit.FormClosed += Transmit_Closed;
+				m_transmit.MdiParent = this;
+				m_transmit.Show();
+			}
+			else if (m_transmit.WindowState == FormWindowState.Minimized)
+				m_transmit.WindowState = FormWindowState.Normal;
+		}
+
+		private void Transmit_Closed(object sender, FormClosedEventArgs e)
+		{
+			m_transmit_location = m_transmit.Location;
+			m_transmit = null;
+		}
+		#endregion
+
+		#region View Matrix Trace 
 		private void mi_ViewMatrix_Click(object sender, EventArgs e)
 		{
 			if (m_matrix == null)
 			{
 				m_matrix = new FixedTrace();
-				m_matrix.Location = new Point(100, 100);
+				m_matrix.Location = m_matrix_location;
 				m_matrix.FormClosed += MatrixTrace_Closed;
 				m_matrix.MdiParent = this;
 				m_matrix.Show();
 			}
 			else if (m_matrix.WindowState == FormWindowState.Minimized)
-			{
 				m_matrix.WindowState = FormWindowState.Normal;
-			}
 		}
 
-		void MatrixTrace_Closed(object sender, FormClosedEventArgs e)
+		private void MatrixTrace_Closed(object sender, FormClosedEventArgs e)
 		{
+			m_matrix_location = m_matrix.Location;
 			m_matrix = null;
 		}
 		#endregion
 
-		#region View Rolling Trace
+		#region View Rolling Trace 
 		private void mi_ViewRolling_Click(object sender, EventArgs e)
 		{
 			if (m_rolling == null)
 			{
 				m_rolling = new RollingTrace();
-				m_rolling.Location = new Point(100, 0);
+				m_rolling.Location = m_rolling_location;
 				m_rolling.FormClosed += RollingTrace_Closed;
 				m_rolling.MdiParent = this;
 				m_rolling.Show();
 			}
 			else if (m_rolling.WindowState == FormWindowState.Minimized)
-			{
 				m_rolling.WindowState = FormWindowState.Normal;
-			}
 		}
 		void RollingTrace_Closed(object sender, FormClosedEventArgs e)
 		{
+			m_rolling_location = m_rolling.Location;
 			m_rolling = null;
 		}
 		#endregion
 
-		#region View Log
+		#region View Log 
 		private void ViewLog_Click(object sender, EventArgs e)
 		{
 			if (m_log == null)
 			{
 				m_log = new Log();
-				m_log.Location = new Point(0, 0);
+				m_log.Location = m_log_location;
 				m_log.FormClosed += Log_FormClosed;
 				m_log.MdiParent = this;
 				m_log.Show();
 			}
 			else if (m_log.WindowState == FormWindowState.Minimized)
-			{
 				m_log.WindowState = FormWindowState.Normal;
-			}
 		}
 		void Log_FormClosed(object sender, FormClosedEventArgs e)
 		{
+			m_log_location = m_log.Location;
 			m_log = null;
 		}
 		#endregion
 
-		#region Refresh Ports
+		#region Refresh Ports 
 		private void Refresh_Click(object sender, EventArgs e)
 		{
 			string[] ports = SerialPort.GetPortNames();
@@ -162,8 +186,8 @@ namespace CANtact
 		}
 		#endregion
 
-		#region Set Status Text
-		private void SetStatus(string text)
+		#region Set Status Text 
+		public void SetStatus(string text)
 		{
 			if (InvokeRequired)
 				BeginInvoke(new Action<string>(SetStatus), text);
@@ -172,7 +196,7 @@ namespace CANtact
 		}
 		#endregion
 
-		#region Connect Click
+		#region Connect Click 
 		private void Connect_Click(object sender, EventArgs e)
 		{
 			if (m_port != null && m_port.IsOpen)
@@ -209,7 +233,7 @@ namespace CANtact
 		}
 		#endregion
 
-		#region COM Port events
+		#region COM Port events 
 		void ComPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
 		{
 		}
