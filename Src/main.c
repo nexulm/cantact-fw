@@ -87,8 +87,11 @@ int main(void)
 {
 	HAL_Init();
 
-	system_clock_config();
 	gpio_config();
+	LED1_on();
+	LED2_on();
+	LED3_on();
+	system_clock_config();
 	
 	can_init();
 	usb_device_init();
@@ -97,6 +100,13 @@ int main(void)
 	can_set_bitrate(CAN_BITRATE_500K);
 	can_enable();
 
+	{
+		systick_context_t * ctx = &systick_context;
+		ctx->LED1_delay = 1;
+		ctx->LED2_delay = 1;
+		ctx->LED3_delay = 1;
+	}
+		
 	while (1)
 	{
 		if (slcan_parse_str(CDC_Receive_Line()) == -2)
