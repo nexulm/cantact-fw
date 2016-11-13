@@ -11,7 +11,7 @@
 BUILD_NUMBER ?= 0
 
 # SOURCES: list of sources in the user application
-SOURCES = main.c usbd_conf.c usbd_cdc_if.c usb_device.c usbd_desc.c stm32f0xx_hal_msp.c stm32f0xx_it.c system_stm32f0xx.c can.c slcan.c
+SOURCES = main.c usbd_conf.c usbd_cdc_if.c usb_device.c usbd_desc.c stm32f0xx_hal_msp.c stm32f0xx_it.c system_stm32f0xx.c can.c slcan.c ring_buffer.c
 
 # TARGET: name of the user application
 TARGET = CANtact-b$(BUILD_NUMBER)
@@ -20,7 +20,12 @@ TARGET = CANtact-b$(BUILD_NUMBER)
 BUILD_DIR = build
 
 # LD_SCRIPT: location of the linker script
-LD_SCRIPT = STM32F042C6_FLASH.ld
+ifeq ($(STM32F072), 1)
+   LD_SCRIPT = STM32F072VB_FLASH.ld
+else
+   LD_SCRIPT = STM32F042C6_FLASH.ld
+endif
+
 
 # USER_DEFS user defined macros
 USER_DEFS = -D HSI48_VALUE=48000000 -D HSE_VALUE=16000000
@@ -34,11 +39,20 @@ USB_INCLUDES += -IMiddlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
 
 # USER_CFLAGS: user C flags (enable warnings, enable debug info)
 USER_CFLAGS = -Wall -g -ffunction-sections -fdata-sections -Os
+
+ifeq ($(INTERNAL_OSCILLATOR), 1)
+    USER_CFLAGS += -DINTERNAL_OSCILLATOR
+endif
+
 # USER_LDFLAGS:  user LD flags
 USER_LDFLAGS = -fno-exceptions -ffunction-sections -fdata-sections -Wl,--gc-sections
 
 # TARGET_DEVICE: device to compile for
-TARGET_DEVICE = STM32F042x6
+ifeq ($(STM32F072), 1)
+    TARGET_DEVICE = STM32F072xB
+else
+    TARGET_DEVICE = STM32F042x6
+endif
 
 #######################################
 # end of user configuration
@@ -73,7 +87,7 @@ DRIVER_PATH = Drivers/STM32F0xx_HAL_Driver
 INCLUDES = -I$(CMSIS_PATH)/Include
 INCLUDES += -I$(CMSIS_DEVICE_PATH)/Include
 INCLUDES += -I$(DRIVER_PATH)/Inc
-INCLUDES += -IInc
+INCLUDES += -Iinc
 INCLUDES += $(USB_INCLUDES)
 INCLUDES += $(USER_INCLUDES)
 
@@ -143,7 +157,11 @@ $(USB_BUILD_DIR):
 # list of user program objects
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(SOURCES:.c=.o)))
 # add an object for the startup code
-OBJECTS += $(BUILD_DIR)/startup_stm32f042x6.o
+ifeq ($(STM32F072), 1)
+    OBJECTS += $(BUILD_DIR)/startup_stm32f072xb.o
+else
+    OBJECTS += $(BUILD_DIR)/startup_stm32f042x6.o
+endif
 
 # use the periphlib core library, plus generic ones (libc, libm, libnosys)
 LIBS = -lstm32cube -lc -lm -lnosys
@@ -161,10 +179,10 @@ $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) $(USB_OBJECTS) $(CUBELIB)
 		-Map=$(BUILD_DIR)/$(TARGET).map
 	$(SIZE) $@
 
-$(BUILD_DIR)/%.o: Src/%.c | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: src/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -Os -c -o $@ $^
 
-$(BUILD_DIR)/%.o: Src/%.s | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: src/%.s | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 $(BUILD_DIR):
